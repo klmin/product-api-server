@@ -1,0 +1,38 @@
+spring:
+  docker:
+    compose:
+      enabled: false
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/product
+    username: product
+    password: product@1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+      password: klmin6394
+
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+        use_sql_comments: true
+        dialect: org.hibernate.dialect.MySQLDialect
+    open-in-view: false
+
+#logging:
+ # level:
+  #  org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+   # org.springframework.orm.jpa: DEBUG
+
+security :
+  jwt :
+    secret-key : gSFa57G1zqMs+XiCM5ZNGpsb59750YsZ1dzveEh4j4c=
+    expiration-time: 900000
+    refresh-expiration-time: 1800000
+    exclude-path: /api/auth/login, /api/auth/refresh-token

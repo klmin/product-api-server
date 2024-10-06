@@ -1,0 +1,29 @@
+spring :
+  profiles :
+    active : local
+    group :
+      local:
+        - local
+      docker:
+        - docker
+    include :
+      - common
+
+---
+spring :
+  config :
+    activate :
+      on-profile : local
+logging:
+  config: classpath:log/log4j2-local.yml
+
+
+---
+spring :
+  config :
+    activate :
+      on-profile : docker
+
+logging:
+  config: classpath:log/log4j2-docker.yml
+

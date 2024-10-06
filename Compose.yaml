@@ -1,0 +1,26 @@
+services:
+  mysql:
+    image: 'mysql:8.0'
+    environment:
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      TZ: Asia/Seoul
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
+    ports:
+      - '3307:3306'
+    volumes:
+      - "./mysql/data:/var/lib/mysql"
+      - "./src/main/sql:/docker-entrypoint-initdb.d"
+    restart: always
+
+  redis:
+    image: 'redis:latest'
+    command: ["redis-server", "--requirepass", "klmin6394"]
+    volumes:
+      - ./redis/data:/data
+    ports:
+      - '6379:6379'
+    restart: always
+
