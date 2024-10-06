@@ -1,15 +1,15 @@
-package com.mapstruct.car.dto;
+package com.product.mapstruct.car.dto;
 
-import com.mapstruct.car.entity.Car;
-import com.mapstruct.car.enums.EnumCarColor;
-import lombok.Builder;
-import lombok.Getter;
+import com.product.mapstruct.car.entity.Car;
+import com.product.mapstruct.car.enums.EnumCarColor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Builder
 @Getter
+
 public class CarDTO {
     private Long id;
     private String name;
@@ -17,6 +17,8 @@ public class CarDTO {
     private List<String> options;
     private EnumCarColor color;
     private LocalDateTime regDttm;
+    private String status;
+    private String tempVehicleId;
 
     public Car toEntity(){
         return Car.builder()

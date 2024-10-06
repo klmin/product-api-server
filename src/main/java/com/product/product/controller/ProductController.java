@@ -2,6 +2,7 @@ package com.product.product.controller;
 
 import com.product.api.response.ApiResponse;
 import com.product.api.response.pagination.CursorPaginationResponse;
+import com.product.product.mapper.ProductMapper;
 import com.product.product.request.ProductCreateRequest;
 import com.product.product.request.ProductListRequest;
 import com.product.product.request.ProductUpdateRequest;
@@ -25,12 +26,13 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService productService;
+    private final ProductMapper productMapper;
 
     @GetMapping
     public ResponseEntity<ApiResponse<ProductListResponseWrapper>> list(@ModelAttribute @Valid ProductListRequest request,
                                                                         @AuthenticationPrincipal SecurityDTO securityDTO){
 
-        CursorPaginationResponse<List<ProductListResponse>> response = productService.list(request.toDTO(securityDTO.getUserId()));
+        CursorPaginationResponse<List<ProductListResponse>> response = productService.list(productMapper.toListDto(request, securityDTO.getUserId()));
         return ApiResponse.success(ProductListResponseWrapper.wrapWithPagination(response.getList(),
                 response.toPaginationResponse()));
     }
@@ -38,13 +40,13 @@ public class ProductController {
     @GetMapping("/{productId}")
     public ResponseEntity<ApiResponse<ProductGetResponseWrapper>> get(@PathVariable Long productId, @AuthenticationPrincipal SecurityDTO securityDTO){
         ProductGetResponse productGetResponse = productService.findByProductIdAndUserUserId(productId, securityDTO.getUserId(), ProductGetResponse.class);
-
         return ApiResponse.success(ProductGetResponseWrapper.wrapping(productGetResponse));
     }
 
     @PostMapping
     public ResponseEntity<ApiResponse<Void>> create(@RequestBody @Valid ProductCreateRequest request, @AuthenticationPrincipal SecurityDTO securityDTO){
-        productService.create(request.toDTO(securityDTO.getUserId()));
+
+        productService.create(productMapper.toCreateDto(request, securityDTO.getUserId()));
         return ApiResponse.created();
     }
 
@@ -52,7 +54,7 @@ public class ProductController {
     public ResponseEntity<ApiResponse<Void>> update(@PathVariable Long productId, @RequestBody @Valid ProductUpdateRequest request,
                                                     @AuthenticationPrincipal SecurityDTO securityDTO){
 
-        productService.update(request.toDTO(productId, securityDTO.getUserId()));
+        productService.update(productMapper.toUpdateDto(request, productId, securityDTO.getUserId()));
         return ApiResponse.success();
     }
 

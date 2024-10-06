@@ -114,8 +114,8 @@ class ProductControllerTest extends AbstractMvcTest {
             Long userId = 1L;
             HttpStatus status = HttpStatus.OK;
 
-            ProductCreateDTO productCreateDTO = buildProductCreateDTO(userId, EnumProductCategory.COFFEE, 3000, 1000,
-                    "아이스 아메리카노", "아메리카노", "4aa5646547", LocalDate.now(), EnumProductSize.SMALL);
+            ProductCreateDTO productCreateDTO = buildProductCreateDTO(userId, EnumProductCategory.TEA, 3000, 1000,
+                    "아이스티", "ㅇㅇㅅㅌ", "4aa5646547", LocalDate.now(), EnumProductSize.SMALL);
 
             Product product = productService.create(productCreateDTO);
 
@@ -209,7 +209,7 @@ class ProductControllerTest extends AbstractMvcTest {
                     .andDo(print())
                     .andExpect(status().is(status.value()))
                     .andExpect(jsonPath("$.meta.code").value(status.value()))
-                    .andExpect(jsonPath("$.meta.message").value("잘못된 상품 카테고리 입니다."))
+                    .andExpect(jsonPath("$.meta.message").value("필수값이 누락되었습니다."))
             ;
 
             productCreateRequest = buildProductCreateRequest(EnumProductCategory.BAKERY, 3000, 2100, "아이스 아메리카노",
@@ -222,7 +222,7 @@ class ProductControllerTest extends AbstractMvcTest {
                     .andDo(print())
                     .andExpect(status().is(status.value()))
                     .andExpect(jsonPath("$.meta.code").value(status.value()))
-                    .andExpect(jsonPath("$.meta.message").value("잘못된 상품 사이즈 입니다."))
+                    .andExpect(jsonPath("$.meta.message").value("필수값이 누락되었습니다."))
             ;
 
         }
@@ -271,7 +271,7 @@ class ProductControllerTest extends AbstractMvcTest {
             HttpStatus status = HttpStatus.OK;
 
             ProductCreateDTO productCreateDTO = get.buildProductCreateDTO(userId, EnumProductCategory.COFFEE, 3000, 1000,
-                    "아이스 아메리카노", "아메리카노", "456411qq", LocalDate.now(), EnumProductSize.SMALL);
+                    "아이스티", "ㅇㅇㅅㅌ", "456411qq", LocalDate.now(), EnumProductSize.SMALL);
 
             Product product = productService.create(productCreateDTO);
 

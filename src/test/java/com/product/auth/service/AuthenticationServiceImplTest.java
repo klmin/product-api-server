@@ -1,5 +1,6 @@
 package com.product.auth.service;
 
+import com.product.user.service.UserService;
 import com.product.util.ProductConstans;
 import com.product.api.exception.ApiRuntimeException;
 import com.product.auth.dto.AuthGenerateTokenDTO;

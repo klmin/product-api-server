@@ -1,4 +1,4 @@
-package com.mapstruct.car.enums;
+package com.product.mapstruct.car.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
+import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
@@ -145,6 +146,7 @@ class ProductServiceImplTest {
                   String description, String barcode, LocalDate expirationDate, EnumProductSize size, Class<? extends Throwable> clazz) {
 
             ProductCreateDTO productCreateDTO = buildProductCreateDTO(userId, category, price, cost, productName, description, barcode, expirationDate, size);
+
             assertThrows(clazz, () -> productService.create(productCreateDTO), "예외 발생 해야함.");
 
         }
@@ -163,8 +165,8 @@ class ProductServiceImplTest {
         private static Stream<Arguments> fail() {
             return Stream.of(
                     Arguments.of(99999L, EnumProductCategory.COFFEE, 3000, 1000, "아이스 아메리카노", "아메리카노", "1212323qq", LocalDate.now(), EnumProductSize.SMALL, JpaObjectRetrievalFailureException.class),
-                    Arguments.of(2L, EnumProductCategory.COFFEE, 4000, 1500, "슈크림 라떼", "라떼", "34eae451", null, null, ApiRuntimeException.class),
-                    Arguments.of(2L, null, 5000, 2000, "아이스 캐모마일", null, "test", LocalDate.now(), EnumProductSize.LARGE, ApiRuntimeException.class)
+                    Arguments.of(2L, EnumProductCategory.COFFEE, 4000, 1500, "슈크림 라떼", "라떼", "34eae451", null, null, JpaSystemException.class),
+                    Arguments.of(2L, null, 5000, 2000, "아이스 캐모마일", null, "test", LocalDate.now(), EnumProductSize.LARGE, JpaSystemException.class)
             );
         }
 

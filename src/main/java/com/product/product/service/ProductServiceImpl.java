@@ -6,6 +6,7 @@ import com.product.product.dto.ProductCreateDTO;
 import com.product.product.dto.ProductListDTO;
 import com.product.product.dto.ProductUpdateDTO;
 import com.product.product.entity.Product;
+import com.product.product.mapper.ProductMapper;
 import com.product.product.query.ProductListQuery;
 import com.product.product.repository.ProductQueryDslRepository;
 import com.product.product.repository.ProductRepository;
@@ -28,17 +29,13 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final ProductQueryDslRepository productQueryDslRepository;
     private final UserService userService;
+    private final ProductMapper productMapper;
 
     @Override
     @Transactional(readOnly = true)
     public CursorPaginationResponse<List<ProductListResponse>> list(ProductListDTO dto) {
 
-        List<ProductListResponse> list = productQueryDslRepository.list(ProductListQuery.builder()
-                                                                                     .userId(dto.getUserId())
-                                                                                     .limit(dto.getLimit())
-                                                                                     .searchKeyword(dto.getSearchKeyword())
-                                                                                     .lastCursorId(dto.getLastCursorId())
-                                                                                     .build());
+        List<ProductListResponse> list = productQueryDslRepository.list(productMapper.toListQuery(dto));
 
         Long nextCursor = !list.isEmpty() ? list.getLast().productId() : null;
         boolean isNext = list.size() == dto.getLimit();
@@ -69,19 +66,23 @@ public class ProductServiceImpl implements ProductService {
         User user = userService.get(dto.getUserId());
         String productNameInitials = KoreanUtil.extractInitials(dto.getProductName());
         return productRepository.insert(
-                Product.builder()
-                        .user(user)
-                        .category(dto.getCategory())
-                        .price(dto.getPrice())
-                        .cost(dto.getCost())
-                        .productName(dto.getProductName())
-                        .productNameInitials(productNameInitials)
-                        .description(dto.getDescription())
-                        .barcode(dto.getBarcode())
-                        .expirationDate(dto.getExpirationDate())
-                        .size(dto.getSize())
-                        .build()
+          productMapper.toCreateEntity(dto, user, productNameInitials)
         );
+
+//        return productRepository.insert(
+//                Product.builder()
+//                        .user(user)
+//                        .category(dto.getCategory())
+//                        .price(dto.getPrice())
+//                        .cost(dto.getCost())
+//                        .productName(dto.getProductName())
+//                        .productNameInitials(productNameInitials)
+//                        .description(dto.getDescription())
+//                        .barcode(dto.getBarcode())
+//                        .expirationDate(dto.getExpirationDate())
+//                        .size(dto.getSize())
+//                        .build()
+//        );
     }
 
     @Override

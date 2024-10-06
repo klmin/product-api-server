@@ -1,4 +1,4 @@
-package com.mapstruct.car.service;
+package com.product.mapstruct.car.service;
 
 import org.springframework.stereotype.Service;
 

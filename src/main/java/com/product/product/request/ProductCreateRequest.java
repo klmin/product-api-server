@@ -6,6 +6,7 @@ import com.product.product.enums.EnumProductSize;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
+import lombok.ToString;
 
 import java.time.LocalDate;
 
