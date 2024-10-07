@@ -1,4 +1,9 @@
-spring :
+spring:
+  threads:
+    virtual:
+      enabled: true
+
+
   security:
     filter:
       order: 2
