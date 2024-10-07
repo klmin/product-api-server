@@ -47,8 +47,8 @@ class SignUpControllerTest extends AbstractMvcTest {
                     )
                     .andDo(print())
                     .andExpect(status().is(status.value()))
-                    .andExpect(jsonPath("$.meta.code").value(status.value()))
-                    .andExpect(jsonPath("$.meta.message").value(status.getReasonPhrase()))
+                    .andExpect(jsonPath("$.code").value(status.value()))
+                    .andExpect(jsonPath("$.message").value(status.getReasonPhrase()))
             ;
 
             UserGetResponse response = userService.findByLoginId(loginId, UserGetResponse.class);
@@ -76,7 +76,7 @@ class SignUpControllerTest extends AbstractMvcTest {
                     )
                     .andDo(print())
                     .andExpect(status().is(status.value()))
-                    .andExpect(jsonPath("$.meta.code").value(status.value()))
+                    .andExpect(jsonPath("$.code").value(status.value()))
                     .andExpect(jsonPath("$.data[0].field").value(field))
             ;
 

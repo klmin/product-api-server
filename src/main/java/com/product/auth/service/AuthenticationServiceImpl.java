@@ -9,7 +9,7 @@ import com.product.jwt.claims.JwtClaims;
 import com.product.jwt.enums.JwtTokenType;
 import com.product.jwt.service.JwtService;
 import com.product.redis.constants.RedisCacheNames;
-import com.product.redis.repository.RedisRepository;
+import com.product.redis.service.RedisService;
 import com.product.security.dto.SecurityDTO;
 import com.product.security.service.SecurityService;
 import com.product.user.projection.LoginIdProjection;
@@ -33,7 +33,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
-    private final RedisRepository redisRepository;
+    private final RedisService redisService;
     private final SecurityService securityService;
     private final UserService userService;
     private final String UNAUTHORIZAED_MESSAGE = "토큰이 유효하지 않습니다.";
@@ -80,9 +80,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         Long userId = Long.parseLong(jwtClaims.getUserId());
 
-        String redisRefreshToken = redisRepository.find(RedisCacheNames.generateJwtRefreshTokenCacheKey(userId));
+        boolean isRefreshToken = redisService.hasKey(RedisCacheNames.generateJwtRefreshTokenCacheKey(userId));
 
-        if(redisRefreshToken == null){
+        if(!isRefreshToken){
             throw new ApiRuntimeException(HttpStatus.UNAUTHORIZED, UNAUTHORIZAED_MESSAGE);
         }
 
@@ -117,8 +117,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         long expiration = jwtClaims.getExpiration().getTime();
         long ttl = (expiration - now) / 1000;
 
-        redisRepository.save(RedisCacheNames.generateJwtBlackListTokenCacheKey(token), jwtClaims.getUserId(), ttl, TimeUnit.SECONDS);
-        redisRepository.delete(RedisCacheNames.generateJwtRefreshTokenCacheKey(userId));
+        redisService.insert(RedisCacheNames.generateJwtBlackListTokenCacheKey(token), jwtClaims.getUserId(), ttl, TimeUnit.SECONDS);
+        redisService.delete(RedisCacheNames.generateJwtRefreshTokenCacheKey(userId));
 
     }
 
@@ -133,7 +133,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     public void insertRefreshToken(Long userId, String refreshToken){
         String key = RedisCacheNames.generateJwtRefreshTokenCacheKey(userId);
-        redisRepository.save(key, refreshToken, jwtService.getRefreshExpirationSecond(), TimeUnit.SECONDS);
+        redisService.insert(key, refreshToken, jwtService.getRefreshExpirationSecond(), TimeUnit.SECONDS);
     }
 
     private TokenResponse buildAuthTokenResponse(SecurityDTO securityDTO) {

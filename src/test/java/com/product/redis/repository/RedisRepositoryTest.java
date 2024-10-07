@@ -4,6 +4,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.concurrent.TimeUnit;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -16,11 +18,11 @@ class RedisRepositoryTest {
     void test() {
         String key = "testkey1";
         String value = "testvalue1";
-        redisRepository.save(key, value);
+        redisRepository.insert(key, value, 1L, TimeUnit.MINUTES);
 
-        assertEquals(value, redisRepository.find(key));
+        assertEquals(value, redisRepository.get(key));
         redisRepository.delete(key);
-        assertNull(redisRepository.find(key));
+        assertNull(redisRepository.get(key));
     }
 
 

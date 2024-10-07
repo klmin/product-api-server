@@ -2,13 +2,13 @@ package com.product.security.service;
 
 
 import com.product.redis.constants.RedisCacheNames;
-import com.product.redis.repository.RedisRepository;
+import com.product.redis.service.RedisService;
 import com.product.security.dto.SecurityDTO;
-import com.product.user.projection.UserProjection;
-import com.product.userrole.projection.UserRoleProjection;
-import com.product.user.projection.UserStatusProjection;
 import com.product.user.enums.EnumUserStatus;
+import com.product.user.projection.UserProjection;
+import com.product.user.projection.UserStatusProjection;
 import com.product.user.service.UserService;
+import com.product.userrole.projection.UserRoleProjection;
 import com.product.userrole.service.UserRoleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +33,7 @@ public class SecurityServiceImpl implements SecurityService {
 
     private final UserService userService;
     private final UserRoleService userRoleService;
-    private final RedisRepository redisRepository;
+    private final RedisService redisService;
     private final RoleHierarchyImpl roleHierarchy;
 
     @Override
@@ -51,15 +51,13 @@ public class SecurityServiceImpl implements SecurityService {
     }
 
     public boolean isActive(Long userId) {
-        String key = RedisCacheNames.generateUserStatusCacheKey(userId);
-        String value = redisRepository.find(key);
-        if(value != null){
-            return Boolean.parseBoolean(value);
-        }
-        UserStatusProjection userStatusProjection = userService.findByUserId(userId, UserStatusProjection.class);
-        boolean isActive = EnumUserStatus.ACTIVE.equals(userStatusProjection.status());
-        redisRepository.save(key, String.valueOf(isActive), 60L, TimeUnit.MINUTES);
-        return isActive;
+        return redisService.getOrInsertWithTTLHours(RedisCacheNames.generateUserStatusCacheKey(userId),
+                Boolean.class,
+                () ->{
+                    UserStatusProjection userStatusProjection = userService.findByUserId(userId, UserStatusProjection.class);
+                    return EnumUserStatus.ACTIVE.equals(userStatusProjection.status());
+                },
+                1L);
     }
 
     @Override

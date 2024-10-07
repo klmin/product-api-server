@@ -1,5 +1,6 @@
 package com.product.product.mapper;
 
+import com.product.product.data.ProductListData;
 import com.product.product.dto.ProductCreateDTO;
 import com.product.product.dto.ProductListDTO;
 import com.product.product.dto.ProductUpdateDTO;
@@ -8,15 +9,19 @@ import com.product.product.query.ProductListQuery;
 import com.product.product.request.ProductCreateRequest;
 import com.product.product.request.ProductListRequest;
 import com.product.product.request.ProductUpdateRequest;
+import com.product.product.response.ProductListResponse;
 import com.product.user.entity.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+
+import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface ProductMapper {
 
     ProductListDTO toListDto(ProductListRequest request, Long userId);
     ProductListQuery toListQuery(ProductListDTO dto);
+    List<ProductListResponse> toListResponse(List<ProductListData> dataList);
 
     ProductCreateDTO toCreateDto(ProductCreateRequest request, Long userId);
     @Mapping(target="description", source="dto.description")

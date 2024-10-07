@@ -2,6 +2,7 @@ package com.product.product.service;
 
 import com.product.api.exception.ApiRuntimeException;
 import com.product.api.response.pagination.CursorPaginationResponse;
+import com.product.product.data.ProductListData;
 import com.product.product.dto.ProductCreateDTO;
 import com.product.product.dto.ProductListDTO;
 import com.product.product.dto.ProductUpdateDTO;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -35,12 +37,13 @@ public class ProductServiceImpl implements ProductService {
     @Transactional(readOnly = true)
     public CursorPaginationResponse<List<ProductListResponse>> list(ProductListDTO dto) {
 
-        List<ProductListResponse> list = productQueryDslRepository.list(productMapper.toListQuery(dto));
+        List<ProductListData> list = productQueryDslRepository.list(productMapper.toListQuery(dto));
+        List<ProductListResponse> dataList = productMapper.toListResponse(list);
 
-        Long nextCursor = !list.isEmpty() ? list.getLast().productId() : null;
+        Long nextCursor = !list.isEmpty() ? dataList.getLast().productId() : null;
         boolean isNext = list.size() == dto.getLimit();
 
-        return CursorPaginationResponse.of(list, nextCursor, isNext);
+        return CursorPaginationResponse.of(dataList, nextCursor, isNext);
     }
 
     @Override
@@ -65,24 +68,8 @@ public class ProductServiceImpl implements ProductService {
     public Product create(ProductCreateDTO dto) {
         User user = userService.get(dto.getUserId());
         String productNameInitials = KoreanUtil.extractInitials(dto.getProductName());
-        return productRepository.insert(
-          productMapper.toCreateEntity(dto, user, productNameInitials)
-        );
+        return productRepository.insert(productMapper.toCreateEntity(dto, user, productNameInitials));
 
-//        return productRepository.insert(
-//                Product.builder()
-//                        .user(user)
-//                        .category(dto.getCategory())
-//                        .price(dto.getPrice())
-//                        .cost(dto.getCost())
-//                        .productName(dto.getProductName())
-//                        .productNameInitials(productNameInitials)
-//                        .description(dto.getDescription())
-//                        .barcode(dto.getBarcode())
-//                        .expirationDate(dto.getExpirationDate())
-//                        .size(dto.getSize())
-//                        .build()
-//        );
     }
 
     @Override

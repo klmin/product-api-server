@@ -21,8 +21,8 @@ public class RedisCacheNames {
     public static String generateJwtRefreshTokenCacheKey(Object id){
         return generateCacheKey(JWT_REFRESH_TOKEN, id);
     }
-    public static String generateJwtBlackListTokenCacheKey(Object id){
-        return generateCacheKey(JWT_BLACK_LIST_TOKEN, id);
+    public static String generateJwtBlackListTokenCacheKey(Object token){
+        return generateCacheKey(JWT_BLACK_LIST_TOKEN, token);
     }
 
 

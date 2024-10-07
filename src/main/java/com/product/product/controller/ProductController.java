@@ -8,8 +8,6 @@ import com.product.product.request.ProductListRequest;
 import com.product.product.request.ProductUpdateRequest;
 import com.product.product.response.ProductGetResponse;
 import com.product.product.response.ProductListResponse;
-import com.product.product.response.wrapper.ProductGetResponseWrapper;
-import com.product.product.response.wrapper.ProductListResponseWrapper;
 import com.product.product.service.ProductService;
 import com.product.security.dto.SecurityDTO;
 import jakarta.validation.Valid;
@@ -29,18 +27,17 @@ public class ProductController {
     private final ProductMapper productMapper;
 
     @GetMapping
-    public ResponseEntity<ApiResponse<ProductListResponseWrapper>> list(@ModelAttribute @Valid ProductListRequest request,
+    public ResponseEntity<ApiResponse<List<ProductListResponse>>> list(@ModelAttribute @Valid ProductListRequest request,
                                                                         @AuthenticationPrincipal SecurityDTO securityDTO){
 
         CursorPaginationResponse<List<ProductListResponse>> response = productService.list(productMapper.toListDto(request, securityDTO.getUserId()));
-        return ApiResponse.success(ProductListResponseWrapper.wrapWithPagination(response.getList(),
-                response.toPaginationResponse()));
+        return ApiResponse.success(response.getList(),response.toPaginationResponse());
     }
 
     @GetMapping("/{productId}")
-    public ResponseEntity<ApiResponse<ProductGetResponseWrapper>> get(@PathVariable Long productId, @AuthenticationPrincipal SecurityDTO securityDTO){
+    public ResponseEntity<ApiResponse<ProductGetResponse>> get(@PathVariable Long productId, @AuthenticationPrincipal SecurityDTO securityDTO){
         ProductGetResponse productGetResponse = productService.findByProductIdAndUserUserId(productId, securityDTO.getUserId(), ProductGetResponse.class);
-        return ApiResponse.success(ProductGetResponseWrapper.wrapping(productGetResponse));
+        return ApiResponse.success(productGetResponse);
     }
 
     @PostMapping

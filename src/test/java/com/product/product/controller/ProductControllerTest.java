@@ -63,10 +63,10 @@ class ProductControllerTest extends AbstractMvcTest {
                             .contentType(MediaType.APPLICATION_JSON))
                     .andDo(print())
                     .andExpect(status().is(status.value()))
-                    .andExpect(jsonPath("$.meta.code").value(status.value()))
-                    .andExpect(jsonPath("$.meta.message").value(status.getReasonPhrase()))
-                    .andExpect(jsonPath("$.data.products[0]").isNotEmpty())
-                    .andExpect(jsonPath("$.data.pagination.nextCursor").isNotEmpty())
+                    .andExpect(jsonPath("$.code").value(status.value()))
+                    .andExpect(jsonPath("$.message").value(status.getReasonPhrase()))
+                    .andExpect(jsonPath("$.data[0]").isNotEmpty())
+                    .andExpect(jsonPath("$.page.nextCursor").isNotEmpty())
             ;
 
         }
@@ -89,11 +89,11 @@ class ProductControllerTest extends AbstractMvcTest {
                             .contentType(MediaType.APPLICATION_JSON))
                     .andDo(print())
                     .andExpect(status().is(status.value()))
-                    .andExpect(jsonPath("$.meta.code").value(status.value()))
-                    .andExpect(jsonPath("$.meta.message").value(status.getReasonPhrase()))
-                    .andExpect(jsonPath("$.data.products").isEmpty())
-                    .andExpect(jsonPath("$.data.pagination.nextCursor").isEmpty())
-                    .andExpect(jsonPath("$.data.pagination.hasNext").value(false))
+                    .andExpect(jsonPath("$.code").value(status.value()))
+                    .andExpect(jsonPath("$.message").value(status.getReasonPhrase()))
+                    .andExpect(jsonPath("$.data").isEmpty())
+                    .andExpect(jsonPath("$.page.nextCursor").isEmpty())
+                    .andExpect(jsonPath("$.page.hasNext").value(false))
 
             ;
 
@@ -123,8 +123,8 @@ class ProductControllerTest extends AbstractMvcTest {
                             .contentType(MediaType.APPLICATION_JSON))
                     .andDo(print())
                     .andExpect(status().is(status.value()))
-                    .andExpect(jsonPath("$.meta.code").value(status.value()))
-                    .andExpect(jsonPath("$.meta.message").value(status.getReasonPhrase()));
+                    .andExpect(jsonPath("$.code").value(status.value()))
+                    .andExpect(jsonPath("$.message").value(status.getReasonPhrase()));
 
         }
 
@@ -144,8 +144,8 @@ class ProductControllerTest extends AbstractMvcTest {
                             .contentType(MediaType.APPLICATION_JSON))
                     .andDo(print())
                     .andExpect(status().is(status.value()))
-                    .andExpect(jsonPath("$.meta.code").value(status.value()))
-                    .andExpect(jsonPath("$.meta.message").value("데이터가 존재하지 않습니다."));
+                    .andExpect(jsonPath("$.code").value(status.value()))
+                    .andExpect(jsonPath("$.message").value("데이터가 존재하지 않습니다."));
         }
 
 
@@ -187,8 +187,8 @@ class ProductControllerTest extends AbstractMvcTest {
                     )
                     .andDo(print())
                     .andExpect(status().is(httpStatus.value()))
-                    .andExpect(jsonPath("$.meta.code").value(httpStatus.value()))
-                    .andExpect(jsonPath("$.meta.message").value(httpStatus.getReasonPhrase()))
+                    .andExpect(jsonPath("$.code").value(httpStatus.value()))
+                    .andExpect(jsonPath("$.message").value(httpStatus.getReasonPhrase()))
             ;
 
         }
@@ -199,7 +199,7 @@ class ProductControllerTest extends AbstractMvcTest {
 
             HttpStatus status = HttpStatus.BAD_REQUEST;
 
-            ProductCreateRequest productCreateRequest = buildProductCreateRequest(null, 3000, 1000, "아이스 아메리카노",
+            ProductCreateRequest productCreateRequest = buildProductCreateRequest(null, null, null, "아이스 아메리카노",
                     "아메리카노", "121q23451", LocalDate.now(), EnumProductSize.SMALL);
 
             mockMvc.perform(post("/api/products")
@@ -208,8 +208,8 @@ class ProductControllerTest extends AbstractMvcTest {
                     )
                     .andDo(print())
                     .andExpect(status().is(status.value()))
-                    .andExpect(jsonPath("$.meta.code").value(status.value()))
-                    .andExpect(jsonPath("$.meta.message").value("필수값이 누락되었습니다."))
+                    .andExpect(jsonPath("$.code").value(status.value()))
+                    .andExpect(jsonPath("$.message").value("필수값이 누락되었습니다."))
             ;
 
             productCreateRequest = buildProductCreateRequest(EnumProductCategory.BAKERY, 3000, 2100, "아이스 아메리카노",
@@ -221,8 +221,8 @@ class ProductControllerTest extends AbstractMvcTest {
                     )
                     .andDo(print())
                     .andExpect(status().is(status.value()))
-                    .andExpect(jsonPath("$.meta.code").value(status.value()))
-                    .andExpect(jsonPath("$.meta.message").value("필수값이 누락되었습니다."))
+                    .andExpect(jsonPath("$.code").value(status.value()))
+                    .andExpect(jsonPath("$.message").value("필수값이 누락되었습니다."))
             ;
 
         }
@@ -282,8 +282,8 @@ class ProductControllerTest extends AbstractMvcTest {
                             .content(objectMapper.writeValueAsString(productUpdateRequest)))
                     .andDo(print())
                     .andExpect(status().is(status.value()))
-                    .andExpect(jsonPath("$.meta.code").value(status.value()))
-                    .andExpect(jsonPath("$.meta.message").value(status.getReasonPhrase()));
+                    .andExpect(jsonPath("$.code").value(status.value()))
+                    .andExpect(jsonPath("$.message").value(status.getReasonPhrase()));
 
         }
 
@@ -302,7 +302,7 @@ class ProductControllerTest extends AbstractMvcTest {
                             .content(objectMapper.writeValueAsString(productUpdateRequest)))
                     .andDo(print())
                     .andExpect(status().is(status.value()))
-                    .andExpect(jsonPath("$.meta.code").value(status.value()));
+                    .andExpect(jsonPath("$.code").value(status.value()));
 
         }
 
@@ -350,8 +350,8 @@ class ProductControllerTest extends AbstractMvcTest {
                             .contentType(MediaType.APPLICATION_JSON))
                     .andDo(print())
                     .andExpect(status().is(status.value()))
-                    .andExpect(jsonPath("$.meta.code").value(status.value()))
-                    .andExpect(jsonPath("$.meta.message").value(status.getReasonPhrase()));
+                    .andExpect(jsonPath("$.code").value(status.value()))
+                    .andExpect(jsonPath("$.message").value(status.getReasonPhrase()));
 
         }
 
@@ -366,8 +366,8 @@ class ProductControllerTest extends AbstractMvcTest {
                             .contentType(MediaType.APPLICATION_JSON))
                     .andDo(print())
                     .andExpect(status().is(status.value()))
-                    .andExpect(jsonPath("$.meta.code").value(status.value()))
-                    .andExpect(jsonPath("$.meta.message").value("삭제에 실패했습니다."));
+                    .andExpect(jsonPath("$.code").value(status.value()))
+                    .andExpect(jsonPath("$.message").value("삭제에 실패했습니다."));
 
         }
     }

@@ -50,8 +50,8 @@ class AuthControllerTest extends AbstractMvcTest {
                     )
                     .andDo(print())
                     .andExpect(status().is(status.value()))
-                    .andExpect(jsonPath("$.meta.code").value(status.value()))
-                    .andExpect(jsonPath("$.meta.message").value(status.getReasonPhrase()))
+                    .andExpect(jsonPath("$.code").value(status.value()))
+                    .andExpect(jsonPath("$.message").value(status.getReasonPhrase()))
                     .andExpect(jsonPath("$.data.accessToken").isNotEmpty())
                     .andExpect(jsonPath("$.data.accessRefreshToken").isNotEmpty())
                     .andExpect(jsonPath("$.data.expiresIn").value(jwtService.getExpirationSecond()))
@@ -73,8 +73,8 @@ class AuthControllerTest extends AbstractMvcTest {
                     )
                     .andDo(print())
                     .andExpect(status().is(status.value()))
-                    .andExpect(jsonPath("$.meta.code").value(status.value()))
-                    .andExpect(jsonPath("$.meta.message").value(status.getReasonPhrase()))
+                    .andExpect(jsonPath("$.code").value(status.value()))
+                    .andExpect(jsonPath("$.message").value(status.getReasonPhrase()))
             ;
 
         }
@@ -141,8 +141,8 @@ class AuthControllerTest extends AbstractMvcTest {
                         )
                         .andDo(print())
                         .andExpect(status().is(HttpStatus.OK.value()))
-                        .andExpect(jsonPath("$.meta.code").value(HttpStatus.OK.value()))
-                        .andExpect(jsonPath("$.meta.message").value(HttpStatus.OK.getReasonPhrase()))
+                        .andExpect(jsonPath("$.code").value(HttpStatus.OK.value()))
+                        .andExpect(jsonPath("$.message").value(HttpStatus.OK.getReasonPhrase()))
                         .andExpect(jsonPath("$.data.accessToken").isNotEmpty())
                         .andExpect(jsonPath("$.data.accessRefreshToken").isNotEmpty())
                         .andExpect(jsonPath("$.data.expiresIn").value(jwtService.getExpirationSecond()))
@@ -161,8 +161,8 @@ class AuthControllerTest extends AbstractMvcTest {
                         )
                         .andDo(print())
                         .andExpect(status().is(HttpStatus.UNAUTHORIZED.value()))
-                        .andExpect(jsonPath("$.meta.code").value(HttpStatus.UNAUTHORIZED.value()))
-                        .andExpect(jsonPath("$.meta.message").value("토큰이 유효하지 않습니다."))
+                        .andExpect(jsonPath("$.code").value(HttpStatus.UNAUTHORIZED.value()))
+                        .andExpect(jsonPath("$.message").value("토큰이 유효하지 않습니다."))
                         .andExpect(jsonPath("$.data").isEmpty())
                 ;
 
@@ -172,8 +172,8 @@ class AuthControllerTest extends AbstractMvcTest {
                         )
                         .andDo(print())
                         .andExpect(status().is(HttpStatus.BAD_REQUEST.value()))
-                        .andExpect(jsonPath("$.meta.code").value(HttpStatus.BAD_REQUEST.value()))
-                        .andExpect(jsonPath("$.meta.message").value("헤더가 잘못 입력되었습니다."))
+                        .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
+                        .andExpect(jsonPath("$.message").value("헤더가 잘못 입력되었습니다."))
                         .andExpect(jsonPath("$.data").isEmpty())
                 ;
 
@@ -183,8 +183,8 @@ class AuthControllerTest extends AbstractMvcTest {
                         )
                         .andDo(print())
                         .andExpect(status().is(HttpStatus.BAD_REQUEST.value()))
-                        .andExpect(jsonPath("$.meta.code").value(HttpStatus.BAD_REQUEST.value()))
-                        .andExpect(jsonPath("$.meta.message").value("헤더가 올바르지 않습니다."))
+                        .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
+                        .andExpect(jsonPath("$.message").value("헤더가 올바르지 않습니다."))
                         .andExpect(jsonPath("$.data").isEmpty())
                 ;
 
@@ -207,8 +207,8 @@ class AuthControllerTest extends AbstractMvcTest {
                         )
                         .andDo(print())
                         .andExpect(status().is(HttpStatus.OK.value()))
-                        .andExpect(jsonPath("$.meta.code").value(HttpStatus.OK.value()))
-                        .andExpect(jsonPath("$.meta.message").value(HttpStatus.OK.getReasonPhrase()))
+                        .andExpect(jsonPath("$.code").value(HttpStatus.OK.value()))
+                        .andExpect(jsonPath("$.message").value(HttpStatus.OK.getReasonPhrase()))
                         .andExpect(jsonPath("$.data").isEmpty())
                 ;
 
@@ -218,8 +218,8 @@ class AuthControllerTest extends AbstractMvcTest {
                         )
                         .andDo(print())
                         .andExpect(status().is(HttpStatus.UNAUTHORIZED.value()))
-                        .andExpect(jsonPath("$.meta.code").value(HttpStatus.UNAUTHORIZED.value()))
-                        .andExpect(jsonPath("$.meta.message").value(HttpStatus.UNAUTHORIZED.getReasonPhrase()))
+                        .andExpect(jsonPath("$.code").value(HttpStatus.UNAUTHORIZED.value()))
+                        .andExpect(jsonPath("$.message").value(HttpStatus.UNAUTHORIZED.getReasonPhrase()))
                         .andExpect(jsonPath("$.data").isEmpty())
                 ;
             }
@@ -233,8 +233,8 @@ class AuthControllerTest extends AbstractMvcTest {
                         )
                         .andDo(print())
                         .andExpect(status().is(HttpStatus.UNAUTHORIZED.value()))
-                        .andExpect(jsonPath("$.meta.code").value(HttpStatus.UNAUTHORIZED.value()))
-                        .andExpect(jsonPath("$.meta.message").value(HttpStatus.UNAUTHORIZED.getReasonPhrase()))
+                        .andExpect(jsonPath("$.code").value(HttpStatus.UNAUTHORIZED.value()))
+                        .andExpect(jsonPath("$.message").value(HttpStatus.UNAUTHORIZED.getReasonPhrase()))
                         .andExpect(jsonPath("$.data").isEmpty())
                 ;
 
@@ -244,8 +244,8 @@ class AuthControllerTest extends AbstractMvcTest {
                         )
                         .andDo(print())
                         .andExpect(status().is(HttpStatus.UNAUTHORIZED.value()))
-                        .andExpect(jsonPath("$.meta.code").value(HttpStatus.UNAUTHORIZED.value()))
-                        .andExpect(jsonPath("$.meta.message").value(HttpStatus.UNAUTHORIZED.getReasonPhrase()))
+                        .andExpect(jsonPath("$.code").value(HttpStatus.UNAUTHORIZED.value()))
+                        .andExpect(jsonPath("$.message").value(HttpStatus.UNAUTHORIZED.getReasonPhrase()))
                         .andExpect(jsonPath("$.data").isEmpty())
                 ;
 

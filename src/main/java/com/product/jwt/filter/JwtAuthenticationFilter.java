@@ -1,15 +1,15 @@
 package com.product.jwt.filter;
 
 
-import com.product.util.ProductConstans;
 import com.product.jwt.claims.JwtClaims;
 import com.product.jwt.enums.JwtTokenType;
 import com.product.jwt.property.JwtProperties;
 import com.product.jwt.service.JwtService;
 import com.product.redis.constants.RedisCacheNames;
-import com.product.redis.repository.RedisRepository;
+import com.product.redis.service.RedisService;
 import com.product.security.dto.SecurityDTO;
 import com.product.security.service.SecurityService;
+import com.product.util.ProductConstans;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -38,7 +38,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     @Qualifier("handlerExceptionResolver")
     private final HandlerExceptionResolver handlerExceptionResolver;
-    private final RedisRepository redisRepository;
+    private final RedisService redisService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -55,7 +55,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             String token = authorizationHeader.substring(7);
 
-            String logoutToken = redisRepository.find(RedisCacheNames.generateJwtBlackListTokenCacheKey(token));
+            String logoutToken = redisService.get(RedisCacheNames.generateJwtBlackListTokenCacheKey(token));
 
             if(logoutToken != null){
                 log.error("[logout Token] token : {}, userId : {}", token, logoutToken);

@@ -2,9 +2,11 @@ package com.product.product.response;
 
 import com.product.product.enums.EnumProductCategory;
 import com.product.product.enums.EnumProductSize;
+import lombok.Builder;
 
 import java.time.LocalDateTime;
 
+@Builder
 public record ProductListResponse(
         Long productId,
         EnumProductCategory category,

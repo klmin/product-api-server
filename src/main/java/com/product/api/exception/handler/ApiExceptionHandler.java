@@ -2,9 +2,12 @@ package com.product.api.exception.handler;
 
 import com.product.api.exception.ApiRuntimeException;
 import com.product.api.response.ApiExceptionResponse;
+import com.product.objectmapper.exception.JsonProcessingRuntimeException;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.RequiredTypeException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +21,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.security.GeneralSecurityException;
 import java.security.SignatureException;
@@ -41,6 +45,13 @@ public class ApiExceptionHandler {
         log.error("## httpMediaTypeNotSupportedExceptionHandler ##");
         this.log(e);
         return ApiExceptionResponse.exception(HttpStatus.UNSUPPORTED_MEDIA_TYPE);
+    }
+
+    @ExceptionHandler(JsonProcessingRuntimeException.class)
+    public ResponseEntity<ApiExceptionResponse> handlerJsonProcessingRuntimeException(JsonProcessingRuntimeException e) {
+        log.error("## handlerJsonProcessingRuntimeException ##");
+        this.log(e);
+        return ApiExceptionResponse.exception(HttpStatus.BAD_REQUEST, "서버에서 오류가 발생하였습니다.");
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -150,7 +161,6 @@ public class ApiExceptionHandler {
     }
 
     private void log(Exception e){
-        e.printStackTrace();
         log.error("Exception Message : {}", e.getMessage());
     }
 }

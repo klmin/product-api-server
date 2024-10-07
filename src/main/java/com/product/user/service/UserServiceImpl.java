@@ -3,7 +3,7 @@ package com.product.user.service;
 
 import com.product.api.exception.ApiRuntimeException;
 import com.product.redis.constants.RedisCacheNames;
-import com.product.redis.repository.RedisRepository;
+import com.product.redis.service.RedisService;
 import com.product.user.dto.UserCreateDTO;
 import com.product.user.dto.UserUpdateDTO;
 import com.product.user.entity.User;
@@ -25,7 +25,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
-    private final RedisRepository redisRepository;
+    private final RedisService redisService;
     private final UserRoleService userRoleService;
     private final UserRoleQueryDslRepository userRoleQueryDslRepository;
 
@@ -67,7 +67,7 @@ public class UserServiceImpl implements UserService {
         long deleteCnt = userRoleQueryDslRepository.deleteUserRoleByUserId(userId);
         if(deleteCnt > 0) {
             repository.deleteOrThrow(userId);
-            redisRepository.delete(RedisCacheNames.generateUserStatusCacheKey(userId));
+            redisService.delete(RedisCacheNames.generateUserStatusCacheKey(userId));
         }
     }
 
@@ -83,7 +83,7 @@ public class UserServiceImpl implements UserService {
     public void changeStatus(Long userId, EnumUserStatus status) {
         User user = repository.get(userId);
         user.changeStatus(status);
-        redisRepository.delete(RedisCacheNames.generateUserStatusCacheKey(userId));
+        redisService.delete(RedisCacheNames.generateUserStatusCacheKey(userId));
     }
 
     @Override
