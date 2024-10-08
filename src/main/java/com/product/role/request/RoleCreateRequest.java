@@ -1,6 +1,6 @@
 package com.product.role.request;
 
-import com.product.role.dto.RoleCreateDTO;
+import com.product.role.dto.RoleCreateDto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
@@ -15,8 +15,8 @@ public record RoleCreateRequest
     String roleName
 )
 {
-    public RoleCreateDTO toDTO(){
-        return RoleCreateDTO.builder()
+    public RoleCreateDto toDTO(){
+        return RoleCreateDto.builder()
                 .roleId(this.roleId)
                 .roleName(this.roleName)
                 .build();

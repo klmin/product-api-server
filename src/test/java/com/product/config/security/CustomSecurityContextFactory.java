@@ -1,6 +1,6 @@
 package com.product.config.security;
 
-import com.product.security.dto.SecurityDTO;
+import com.product.security.dto.SecurityDto;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
@@ -14,7 +14,7 @@ public class CustomSecurityContextFactory implements WithSecurityContextFactory<
     public SecurityContext createSecurityContext(WithMockUserCustom annotation) {
 
         SecurityContext context = SecurityContextHolder.createEmptyContext();
-        SecurityDTO securityDTO = SecurityDTO.builder()
+        SecurityDto securityDto = SecurityDto.builder()
                 .userId(annotation.userId())
                 .loginId(annotation.loginId())
                 .username(annotation.username())
@@ -24,7 +24,7 @@ public class CustomSecurityContextFactory implements WithSecurityContextFactory<
                         .toList())
                 .build();
 
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(securityDTO, null, securityDTO.getAuthorities());
+        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(securityDto, null, securityDto.getAuthorities());
         context.setAuthentication(authToken);
 
         return context;

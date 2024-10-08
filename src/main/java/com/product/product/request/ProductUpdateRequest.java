@@ -1,6 +1,6 @@
 package com.product.product.request;
 
-import com.product.product.dto.ProductUpdateDTO;
+import com.product.product.dto.ProductUpdateDto;
 import com.product.product.enums.EnumProductCategory;
 import com.product.product.enums.EnumProductSize;
 import lombok.Builder;
@@ -27,8 +27,8 @@ public record ProductUpdateRequest(
         EnumProductSize size
 ) {
 
-    public ProductUpdateDTO toDTO(Long productId, Long userId) {
-        return ProductUpdateDTO.builder()
+    public ProductUpdateDto toDTO(Long productId, Long userId) {
+        return ProductUpdateDto.builder()
                 .userId(userId)
                 .productId(productId)
                 .category(category)

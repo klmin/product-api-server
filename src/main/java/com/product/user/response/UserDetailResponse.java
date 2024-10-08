@@ -5,7 +5,7 @@ import com.product.user.enums.EnumUserType;
 
 import java.time.LocalDateTime;
 
-public record UserGetResponse
+public record UserDetailResponse
 (
         Long userId,
     String loginId,

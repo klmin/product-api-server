@@ -4,7 +4,7 @@ import com.product.config.abstracts.AbstractMvcTest;
 import com.product.signup.request.SignUpCreateRequest;
 import com.product.user.enums.EnumUserStatus;
 import com.product.user.enums.EnumUserType;
-import com.product.user.response.UserGetResponse;
+import com.product.user.response.UserDetailResponse;
 import com.product.user.service.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -37,7 +37,7 @@ class SignUpControllerTest extends AbstractMvcTest {
         @DisplayName("회원가입 컨트롤러 성공 테스트")
         @ParameterizedTest
         @MethodSource
-        void success (String loginId, String userName, String password, String email, String description, HttpStatus status) throws Exception {
+        void success(String loginId, String userName, String password, String email, String description, HttpStatus status) throws Exception {
 
             SignUpCreateRequest request = buildSignUpCreateRequest(loginId, userName, password, email, description);
 
@@ -51,7 +51,7 @@ class SignUpControllerTest extends AbstractMvcTest {
                     .andExpect(jsonPath("$.message").value(status.getReasonPhrase()))
             ;
 
-            UserGetResponse response = userService.findByLoginId(loginId, UserGetResponse.class);
+            UserDetailResponse response = userService.findByLoginId(loginId, UserDetailResponse.class);
 
             assertEquals(response.loginId(), loginId);
             assertEquals(response.userName(), userName);
@@ -77,7 +77,7 @@ class SignUpControllerTest extends AbstractMvcTest {
                     .andDo(print())
                     .andExpect(status().is(status.value()))
                     .andExpect(jsonPath("$.code").value(status.value()))
-                    .andExpect(jsonPath("$.data[0].field").value(field))
+                    .andExpect(jsonPath("$.error[0].field").value(field))
             ;
 
         }

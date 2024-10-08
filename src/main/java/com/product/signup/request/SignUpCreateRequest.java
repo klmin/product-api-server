@@ -1,6 +1,6 @@
 package com.product.signup.request;
 
-import com.product.signup.dto.SignUpCreateDTO;
+import com.product.signup.dto.SignUpCreateDto;
 import com.product.util.PatternUtil;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -27,8 +27,8 @@ public record SignUpCreateRequest(
 
         String description
 ) {
-    public SignUpCreateDTO toDTO() {
-        return SignUpCreateDTO.builder()
+    public SignUpCreateDto toDTO() {
+        return SignUpCreateDto.builder()
                 .loginId(this.loginId)
                 .userName(this.userName)
                 .password(this.password)

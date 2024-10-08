@@ -3,25 +3,22 @@ package com.product.product.service;
 import com.product.api.exception.ApiRuntimeException;
 import com.product.api.response.pagination.CursorPaginationResponse;
 import com.product.product.data.ProductListData;
-import com.product.product.dto.ProductCreateDTO;
-import com.product.product.dto.ProductListDTO;
-import com.product.product.dto.ProductUpdateDTO;
+import com.product.product.dto.ProductCreateDto;
+import com.product.product.dto.ProductListDto;
+import com.product.product.dto.ProductUpdateDto;
 import com.product.product.entity.Product;
 import com.product.product.mapper.ProductMapper;
-import com.product.product.query.ProductListQuery;
 import com.product.product.repository.ProductQueryDslRepository;
 import com.product.product.repository.ProductRepository;
 import com.product.product.response.ProductListResponse;
 import com.product.user.entity.User;
 import com.product.user.service.UserService;
 import com.product.util.KoreanUtil;
-import com.product.util.ValidationUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -35,7 +32,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional(readOnly = true)
-    public CursorPaginationResponse<List<ProductListResponse>> list(ProductListDTO dto) {
+    public CursorPaginationResponse<List<ProductListResponse>> list(ProductListDto dto) {
 
         List<ProductListData> list = productQueryDslRepository.list(productMapper.toListQuery(dto));
         List<ProductListResponse> dataList = productMapper.toListResponse(list);
@@ -65,7 +62,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product create(ProductCreateDTO dto) {
+    public Product create(ProductCreateDto dto) {
         User user = userService.get(dto.getUserId());
         String productNameInitials = KoreanUtil.extractInitials(dto.getProductName());
         return productRepository.insert(productMapper.toCreateEntity(dto, user, productNameInitials));
@@ -73,7 +70,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product update(ProductUpdateDTO dto) {
+    public Product update(ProductUpdateDto dto) {
 
         Product product = productRepository.findByProductIdAndUserUserId(dto.getProductId(), dto.getUserId(), Product.class)
                                            .orElseThrow(() -> new ApiRuntimeException("데이터가 존재하지 않습니다."));

@@ -1,7 +1,7 @@
 package com.product.auth.service;
 
 import com.product.api.exception.ApiRuntimeException;
-import com.product.auth.dto.AuthGenerateTokenDTO;
+import com.product.auth.dto.AuthGenerateTokenDto;
 import com.product.auth.response.AuthRefreshTokenResponse;
 import com.product.auth.response.AuthTokenResponse;
 import com.product.auth.response.TokenResponse;
@@ -10,7 +10,7 @@ import com.product.jwt.enums.JwtTokenType;
 import com.product.jwt.service.JwtService;
 import com.product.redis.constants.RedisCacheNames;
 import com.product.redis.service.RedisService;
-import com.product.security.dto.SecurityDTO;
+import com.product.security.dto.SecurityDto;
 import com.product.security.service.SecurityService;
 import com.product.user.projection.LoginIdProjection;
 import com.product.user.service.UserService;
@@ -38,7 +38,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final UserService userService;
     private final String UNAUTHORIZAED_MESSAGE = "토큰이 유효하지 않습니다.";
 
-    public SecurityDTO authenticate(String loginId, String password) {
+    public SecurityDto authenticate(String loginId, String password) {
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -47,16 +47,16 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 )
         );
 
-        return (SecurityDTO) authentication.getPrincipal();
+        return (SecurityDto) authentication.getPrincipal();
     }
 
     @Override
-    public AuthTokenResponse generateToken(AuthGenerateTokenDTO dto) {
+    public AuthTokenResponse generateToken(AuthGenerateTokenDto dto) {
 
         String loginId = dto.getLoginId();
-        SecurityDTO securityDTO = authenticate(loginId, dto.getPassword());
+        SecurityDto securityDto = authenticate(loginId, dto.getPassword());
 
-        TokenResponse tokenResponse = buildAuthTokenResponse(securityDTO);
+        TokenResponse tokenResponse = buildAuthTokenResponse(securityDto);
 
         return AuthTokenResponse.builder()
                 .accessToken(tokenResponse.getAccessToken())
@@ -88,9 +88,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         LoginIdProjection loginIdProjection = userService.findByUserId(userId, LoginIdProjection.class);
 
-        SecurityDTO securityDTO = (SecurityDTO) securityService.loadUserByUsername(loginIdProjection.loginId());
+        SecurityDto securityDto = (SecurityDto) securityService.loadUserByUsername(loginIdProjection.loginId());
 
-        TokenResponse tokenResponse = buildAuthTokenResponse(securityDTO);
+        TokenResponse tokenResponse = buildAuthTokenResponse(securityDto);
 
         return AuthRefreshTokenResponse.builder()
                 .accessToken(tokenResponse.getAccessToken())
@@ -136,11 +136,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         redisService.insert(key, refreshToken, jwtService.getRefreshExpirationSecond(), TimeUnit.SECONDS);
     }
 
-    private TokenResponse buildAuthTokenResponse(SecurityDTO securityDTO) {
-        String accessToken = jwtService.generateToken(securityDTO);
-        String refreshToken = jwtService.generateRefreshToken(securityDTO);
+    private TokenResponse buildAuthTokenResponse(SecurityDto securityDto) {
+        String accessToken = jwtService.generateToken(securityDto);
+        String refreshToken = jwtService.generateRefreshToken(securityDto);
 
-        this.insertRefreshToken(securityDTO.getUserId(), refreshToken);
+        this.insertRefreshToken(securityDto.getUserId(), refreshToken);
 
         return TokenResponse.builder()
                 .accessToken(accessToken)

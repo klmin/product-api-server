@@ -1,13 +1,13 @@
 package com.product.auth.service;
 
 
-import com.product.auth.dto.AuthGenerateTokenDTO;
+import com.product.auth.dto.AuthGenerateTokenDto;
 import com.product.auth.response.AuthRefreshTokenResponse;
 import com.product.auth.response.AuthTokenResponse;
 
 public interface AuthenticationService {
 
-    AuthTokenResponse generateToken(AuthGenerateTokenDTO dto);
+    AuthTokenResponse generateToken(AuthGenerateTokenDto dto);
 
     AuthRefreshTokenResponse refreshToken(String authorizationHeader);
 

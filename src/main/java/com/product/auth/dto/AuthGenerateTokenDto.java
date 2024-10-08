@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class AuthGenerateTokenDTO {
+public class AuthGenerateTokenDto {
     private String loginId;
     private String password;
 }

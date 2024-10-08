@@ -4,12 +4,14 @@ package com.product.user.service;
 import com.product.api.exception.ApiRuntimeException;
 import com.product.redis.constants.RedisCacheNames;
 import com.product.redis.service.RedisService;
-import com.product.user.dto.UserCreateDTO;
-import com.product.user.dto.UserUpdateDTO;
+import com.product.user.dto.UserCreateDto;
+import com.product.user.dto.UserUpdateDto;
 import com.product.user.entity.User;
 import com.product.user.enums.EnumUserStatus;
 import com.product.user.repository.UserRepository;
-import com.product.userrole.dto.UserRoleCreateDTO;
+import com.product.userrole.dto.UserRoleCreateDto;
+import com.product.userrole.entity.UserRole;
+import com.product.userrole.projection.UserRoleProjection;
 import com.product.userrole.repository.UserRoleQueryDslRepository;
 import com.product.userrole.service.UserRoleService;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +19,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Collection;
 
 @Service
 @Transactional
@@ -30,7 +34,7 @@ public class UserServiceImpl implements UserService {
     private final UserRoleQueryDslRepository userRoleQueryDslRepository;
 
     @Override
-    public void create(UserCreateDTO dto) {
+    public User create(UserCreateDto dto) {
         User user = repository.insert(
                 User.builder()
                         .loginId(dto.getLoginId())
@@ -45,8 +49,10 @@ public class UserServiceImpl implements UserService {
         );
 
         for(String roleId : dto.getRoleIds()) {
-            userRoleService.create(UserRoleCreateDTO.builder().userId(user.getUserId()).roleId(roleId).build());
+            userRoleService.create(UserRoleCreateDto.builder().userId(user.getUserId()).roleId(roleId).build());
         }
+
+        return user;
 
     }
 
@@ -57,7 +63,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void update(UserUpdateDTO dto) {
+    public void update(UserUpdateDto dto) {
         User user = repository.get(dto.getUserId());
         user.update(dto);
     }

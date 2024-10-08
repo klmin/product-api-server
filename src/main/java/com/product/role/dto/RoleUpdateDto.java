@@ -7,7 +7,7 @@ import org.springframework.util.StringUtils;
 
 @Getter
 @Builder
-public class RoleUpdateDTO {
+public class RoleUpdateDto {
 
     private String roleId;
     private String roleName;

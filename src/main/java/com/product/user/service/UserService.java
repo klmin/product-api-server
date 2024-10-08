@@ -1,16 +1,16 @@
 package com.product.user.service;
 
-import com.product.user.dto.UserCreateDTO;
-import com.product.user.dto.UserUpdateDTO;
+import com.product.user.dto.UserCreateDto;
+import com.product.user.dto.UserUpdateDto;
 import com.product.user.entity.User;
 import com.product.user.enums.EnumUserStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 public interface UserService {
 
-    void create(UserCreateDTO dto);
+    User create(UserCreateDto dto);
 
-    void update(UserUpdateDTO dto);
+    void update(UserUpdateDto dto);
 
     User get(Long userId);
 

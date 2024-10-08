@@ -1,6 +1,6 @@
 package com.product.role.request;
 
-import com.product.role.dto.RoleUpdateDTO;
+import com.product.role.dto.RoleUpdateDto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
@@ -16,8 +16,8 @@ public record RoleUpdateRequest
     String description
 )
 {
-    public RoleUpdateDTO toDTO(){
-        return RoleUpdateDTO.builder()
+    public RoleUpdateDto toDTO(){
+        return RoleUpdateDto.builder()
                 .roleId(this.roleId)
                 .roleName(this.roleName)
                 .description(this.description)

@@ -1,11 +1,13 @@
 package com.product.util;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class KoreanUtilTest {
-
+    
+    @DisplayName("초성변환성공")
     @Test
     void extractInitials() {
 

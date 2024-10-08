@@ -9,7 +9,7 @@ import java.time.LocalDate;
 
 @Getter
 @Builder
-public class ProductUpdateDTO {
+public class ProductUpdateDto {
 
     private Long userId;
     private Long productId;

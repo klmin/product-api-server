@@ -1,7 +1,7 @@
 package com.product.userrole.service;
 
 import com.product.userrole.compositekey.UserRoleKey;
-import com.product.userrole.dto.UserRoleCreateDTO;
+import com.product.userrole.dto.UserRoleCreateDto;
 import com.product.userrole.entity.UserRole;
 
 
@@ -9,7 +9,7 @@ import java.util.Collection;
 
 public interface UserRoleService {
 
-    UserRole create(UserRoleCreateDTO dto);
+    UserRole create(UserRoleCreateDto dto);
 
     void delete(UserRoleKey id);
 

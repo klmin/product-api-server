@@ -1,6 +1,6 @@
 package com.product.rolehierarchy.dto;
 
-public record RoleHierarchyListDTO
+public record RoleHierarchyListDto
 (
         String childId,
         String parentId

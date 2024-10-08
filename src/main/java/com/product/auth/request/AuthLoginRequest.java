@@ -1,6 +1,6 @@
 package com.product.auth.request;
 
-import com.product.auth.dto.AuthGenerateTokenDTO;
+import com.product.auth.dto.AuthGenerateTokenDto;
 import com.product.util.PatternUtil;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -20,8 +20,8 @@ public record AuthLoginRequest
 
 )
 {
-    public AuthGenerateTokenDTO toTokenDTO(){
-        return AuthGenerateTokenDTO.builder()
+    public AuthGenerateTokenDto toTokenDTO(){
+        return AuthGenerateTokenDto.builder()
         .loginId(this.loginId)
         .password(this.password)
         .build();

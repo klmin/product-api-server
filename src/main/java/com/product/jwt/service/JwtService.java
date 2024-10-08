@@ -5,7 +5,7 @@ import com.product.util.ProductConstans;
 import com.product.jwt.claims.JwtClaims;
 import com.product.jwt.enums.JwtTokenType;
 import com.product.jwt.property.JwtProperties;
-import com.product.security.dto.SecurityDTO;
+import com.product.security.dto.SecurityDto;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
@@ -47,10 +47,10 @@ public class JwtService {
         byte[] keyBytes = Decoders.BASE64.decode(jwtProperties.getSecretKey());
         return Keys.hmacShaKeyFor(keyBytes);
     }
-    public JwtBuilder jwtbuilder(SecurityDTO securityDTO, long time, String tokenType){
+    public JwtBuilder jwtbuilder(SecurityDto securityDto, long time, String tokenType){
         return Jwts.builder()
                 .claim(TOKEN_TYPE, tokenType)
-                .subject(String.valueOf(securityDTO.getUserId()))
+                .subject(String.valueOf(securityDto.getUserId()))
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + time))
                 .signWith(getSignInKey())
@@ -58,14 +58,14 @@ public class JwtService {
                 .and();
     }
 
-    public String generateToken(SecurityDTO securityDTO){
-        return jwtbuilder(securityDTO, getExpirationTime(), JwtTokenType.ACCESS.getName())
-                .claim(ROLES, securityDTO.getAuthorities().stream().map(Objects::toString).toList())
+    public String generateToken(SecurityDto securityDto){
+        return jwtbuilder(securityDto, getExpirationTime(), JwtTokenType.ACCESS.getName())
+                .claim(ROLES, securityDto.getAuthorities().stream().map(Objects::toString).toList())
                 .compact();
     }
 
-    public String generateRefreshToken(SecurityDTO securityDTO){
-        return jwtbuilder(securityDTO, getRefreshExpirationTime(), JwtTokenType.REFRESH.getName()).compact();
+    public String generateRefreshToken(SecurityDto securityDto){
+        return jwtbuilder(securityDto, getRefreshExpirationTime(), JwtTokenType.REFRESH.getName()).compact();
     }
 
     private Claims extractAllClaims(String token) {

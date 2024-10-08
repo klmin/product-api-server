@@ -9,7 +9,7 @@ import java.time.LocalDate;
 
 @Getter
 @Builder
-public class ProductCreateDTO {
+public class ProductCreateDto {
 
     private Long userId;
     private EnumProductCategory category;

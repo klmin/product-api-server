@@ -6,7 +6,7 @@ import com.product.user.request.UserChangePasswordRequest;
 import com.product.user.request.UserChangeStatusRequest;
 import com.product.user.request.UserCreateRequest;
 import com.product.user.request.UserUpdateRequest;
-import com.product.user.response.UserGetResponse;
+import com.product.user.response.UserDetailResponse;
 import com.product.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +21,8 @@ public class UserController {
     private final UserService service;
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<UserGetResponse>> get(@PathVariable Long id)  {
-        UserGetResponse entity = service.findByUserId(id, UserGetResponse.class);
+    public ResponseEntity<ApiResponse<UserDetailResponse>> get(@PathVariable Long id)  {
+        UserDetailResponse entity = service.findByUserId(id, UserDetailResponse.class);
         return ApiResponse.success(entity);
     }
 

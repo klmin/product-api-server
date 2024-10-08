@@ -10,14 +10,13 @@ import java.util.List;
 
 @Getter
 @Builder
-public class UserCreateDTO {
+public class UserCreateDto {
 
     private String loginId;
     private String userName;
     private String password;
     private EnumUserStatus status;
     private EnumUserType userType;
-    private Long companyId;
     private String email;
     private String mobile;
     private String description;

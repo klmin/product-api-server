@@ -9,7 +9,7 @@ import java.util.Collection;
 
 @Getter
 @Builder
-public class SecurityDTO implements UserDetails {
+public class SecurityDto implements UserDetails {
 
     private Long userId;
     private String loginId;

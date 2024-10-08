@@ -1,6 +1,6 @@
 package com.product.jpa.config;
 
-import com.product.security.dto.SecurityDTO;
+import com.product.security.dto.SecurityDto;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,8 +19,8 @@ public class AuditConfig implements AuditorAware<Long> {
             return Optional.empty();
         }
 
-        SecurityDTO securityDTO = (SecurityDTO) authenticationToken.getPrincipal();
+        SecurityDto securityDto = (SecurityDto) authenticationToken.getPrincipal();
 
-        return Optional.of(securityDTO.getUserId());
+        return Optional.of(securityDto.getUserId());
     }
 }

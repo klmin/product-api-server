@@ -3,7 +3,7 @@ package com.product.user.entity;
 
 import com.product.api.exception.ApiRuntimeException;
 import com.product.jpa.audit.AuditableEntity;
-import com.product.user.dto.UserUpdateDTO;
+import com.product.user.dto.UserUpdateDto;
 import com.product.user.enums.EnumUserStatus;
 import com.product.user.enums.EnumUserType;
 import com.product.userrole.entity.UserRole;
@@ -16,6 +16,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -58,7 +60,7 @@ public class User extends AuditableEntity {
     private String description;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private List<UserRole> userRoles;
+    private List<UserRole> userRoles = new ArrayList<>();
 
     @Builder
     public User(Long userId, String loginId, String userName, String password, EnumUserStatus status, EnumUserType userType, String email, String mobile, String description) {
@@ -73,7 +75,7 @@ public class User extends AuditableEntity {
         this.description = description;
     }
 
-    public void update(UserUpdateDTO userUpdateDTO){
+    public void update(UserUpdateDto userUpdateDTO){
         if(StringUtils.hasText(userUpdateDTO.getUserName())){
             this.userName = userUpdateDTO.getUserName();
         }
@@ -104,6 +106,9 @@ public class User extends AuditableEntity {
     }
 
     public void changeStatus(EnumUserStatus status){
+        if(status == null){
+            throw new ApiRuntimeException("유저상태에 값이 존재하지 않습니다.");
+        }
         this.status = status;
     }
 

@@ -1,6 +1,6 @@
 package com.product.product.request;
 
-import com.product.product.dto.ProductListDTO;
+import com.product.product.dto.ProductListDto;
 import lombok.Builder;
 
 @Builder
@@ -9,8 +9,8 @@ public record ProductListRequest(
         Long lastCursorId
 ) {
 
-    public ProductListDTO toDTO(Long userId){
-        return ProductListDTO.builder()
+    public ProductListDto toDTO(Long userId){
+        return ProductListDto.builder()
                 .userId(userId)
                 .searchKeyword(searchKeyword)
                 .lastCursorId(lastCursorId)

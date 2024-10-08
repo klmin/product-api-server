@@ -1,12 +1,11 @@
 package com.product.product.request;
 
-import com.product.product.dto.ProductCreateDTO;
+import com.product.product.dto.ProductCreateDto;
 import com.product.product.enums.EnumProductCategory;
 import com.product.product.enums.EnumProductSize;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
-import lombok.ToString;
 
 import java.time.LocalDate;
 
@@ -40,8 +39,8 @@ public record ProductCreateRequest(
 
 ) {
 
-        public ProductCreateDTO toDTO(Long userId) {
-                return ProductCreateDTO.builder()
+        public ProductCreateDto toDTO(Long userId) {
+                return ProductCreateDto.builder()
                         .userId(userId)
                         .category(category)
                         .price(price)

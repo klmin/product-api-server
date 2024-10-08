@@ -1,9 +1,8 @@
 package com.product.auth.service;
 
-import com.product.user.service.UserService;
 import com.product.util.ProductConstans;
 import com.product.api.exception.ApiRuntimeException;
-import com.product.auth.dto.AuthGenerateTokenDTO;
+import com.product.auth.dto.AuthGenerateTokenDto;
 import com.product.auth.response.AuthRefreshTokenResponse;
 import com.product.auth.response.AuthTokenResponse;
 import com.product.jwt.service.JwtService;
@@ -38,7 +37,7 @@ class AuthenticationServiceImplTest {
         @ParameterizedTest
         @MethodSource
         void success(String loginId, String password) {
-            AuthGenerateTokenDTO dto = buildGenerateToken(loginId, password);
+            AuthGenerateTokenDto dto = buildGenerateToken(loginId, password);
             AuthTokenResponse response = authenticationService.generateToken(dto);
 
             assertNotNull(response.getAccessToken());
@@ -51,7 +50,7 @@ class AuthenticationServiceImplTest {
         @ParameterizedTest
         @MethodSource
         void fail(String loginId, String password, Class<? extends Throwable> clazz) {
-            AuthGenerateTokenDTO dto = buildGenerateToken(loginId, password);
+            AuthGenerateTokenDto dto = buildGenerateToken(loginId, password);
             assertThrows(clazz, () -> authenticationService.generateToken(dto), "예외 발생 해야함");
         }
 
@@ -71,8 +70,8 @@ class AuthenticationServiceImplTest {
             );
         }
 
-        private static AuthGenerateTokenDTO buildGenerateToken(String loginId, String password) {
-            return AuthGenerateTokenDTO.builder().loginId(loginId).password(password).build();
+        private static AuthGenerateTokenDto buildGenerateToken(String loginId, String password) {
+            return AuthGenerateTokenDto.builder().loginId(loginId).password(password).build();
         }
     }
 
@@ -85,7 +84,7 @@ class AuthenticationServiceImplTest {
         @MethodSource
         void success(String loginId, String password) {
 
-            AuthGenerateTokenDTO dto = generteToken.buildGenerateToken(loginId, password);
+            AuthGenerateTokenDto dto = generteToken.buildGenerateToken(loginId, password);
             AuthTokenResponse authTokenResponse = authenticationService.generateToken(dto);
             String authorizationHeader = authTokenResponse.getAccessRefreshToken();
             AuthRefreshTokenResponse authRefreshTokenResponse = authenticationService.refreshToken(ProductConstans.BEARER_PREPIX +authorizationHeader);
@@ -101,7 +100,7 @@ class AuthenticationServiceImplTest {
         @Test
         void fail() {
 
-            AuthGenerateTokenDTO dto = generteToken.buildGenerateToken("admin", "1234@aA!");
+            AuthGenerateTokenDto dto = generteToken.buildGenerateToken("admin", "1234@aA!");
             AuthTokenResponse authTokenResponse = authenticationService.generateToken(dto);
 
             ApiRuntimeException exception = assertThrows(ApiRuntimeException.class,
@@ -138,7 +137,7 @@ class AuthenticationServiceImplTest {
         @MethodSource
         void success(String loginId, String password) {
 
-            AuthGenerateTokenDTO dto = generteToken.buildGenerateToken(loginId, password);
+            AuthGenerateTokenDto dto = generteToken.buildGenerateToken(loginId, password);
             AuthTokenResponse authTokenResponse = authenticationService.generateToken(dto);
             AuthRefreshTokenResponse authRefreshTokenResponse = authenticationService.refreshToken(ProductConstans.BEARER_PREPIX +authTokenResponse.getAccessRefreshToken());
 
@@ -161,7 +160,7 @@ class AuthenticationServiceImplTest {
         @Test
         void fail() {
 
-            AuthGenerateTokenDTO dto = generteToken.buildGenerateToken("admin", "123456A@a");
+            AuthGenerateTokenDto dto = generteToken.buildGenerateToken("admin", "1234@aA!");
             AuthTokenResponse authTokenResponse = authenticationService.generateToken(dto);
 
             ApiRuntimeException exception = assertThrows(ApiRuntimeException.class,
@@ -186,9 +185,9 @@ class AuthenticationServiceImplTest {
 
         private static Stream<Arguments> success() {
             return Stream.of(
-                    Arguments.of("admin", "123456A@a"),
-                    Arguments.of("product", "123456A@a"),
-                    Arguments.of("test1", "123456A@a")
+                    Arguments.of("admin", "1234@aA!"),
+                    Arguments.of("01012345678", "1234@aA!"),
+                    Arguments.of("01022345678", "1234@aA!")
             );
         }
 

@@ -7,7 +7,7 @@ import com.product.jwt.property.JwtProperties;
 import com.product.jwt.service.JwtService;
 import com.product.redis.constants.RedisCacheNames;
 import com.product.redis.service.RedisService;
-import com.product.security.dto.SecurityDTO;
+import com.product.security.dto.SecurityDto;
 import com.product.security.service.SecurityService;
 import com.product.util.ProductConstans;
 import jakarta.servlet.FilterChain;
@@ -87,7 +87,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             log.info("authorities : {}", authorities);
 
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                SecurityDTO.builder()
+                SecurityDto.builder()
                            .userId(userId)
                            .authorities(authorities)
                            .build(),

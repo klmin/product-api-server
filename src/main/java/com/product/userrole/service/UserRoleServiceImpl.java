@@ -3,7 +3,7 @@ package com.product.userrole.service;
 
 import com.product.api.exception.ApiRuntimeException;
 import com.product.userrole.compositekey.UserRoleKey;
-import com.product.userrole.dto.UserRoleCreateDTO;
+import com.product.userrole.dto.UserRoleCreateDto;
 import com.product.userrole.entity.UserRole;
 import com.product.userrole.repository.UserRoleRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ public class UserRoleServiceImpl implements UserRoleService {
     private final UserRoleRepository repository;
 
     @Override
-    public UserRole create(UserRoleCreateDTO dto) {
+    public UserRole create(UserRoleCreateDto dto) {
         return repository.insert(
                 UserRole.builder()
                         .userId(dto.getUserId())

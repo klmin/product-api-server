@@ -3,7 +3,7 @@ package com.product.product.controller;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.product.config.abstracts.AbstractMvcTest;
 import com.product.config.security.WithMockUserCustom;
-import com.product.product.dto.ProductCreateDTO;
+import com.product.product.dto.ProductCreateDto;
 import com.product.product.entity.Product;
 import com.product.product.enums.EnumProductCategory;
 import com.product.product.enums.EnumProductSize;
@@ -114,7 +114,7 @@ class ProductControllerTest extends AbstractMvcTest {
             Long userId = 1L;
             HttpStatus status = HttpStatus.OK;
 
-            ProductCreateDTO productCreateDTO = buildProductCreateDTO(userId, EnumProductCategory.TEA, 3000, 1000,
+            ProductCreateDto productCreateDTO = buildProductCreateDTO(userId, EnumProductCategory.TEA, 3000, 1000,
                     "아이스티", "ㅇㅇㅅㅌ", "4aa5646547", LocalDate.now(), EnumProductSize.SMALL);
 
             Product product = productService.create(productCreateDTO);
@@ -135,7 +135,7 @@ class ProductControllerTest extends AbstractMvcTest {
             Long userId = 2L;
             HttpStatus status = HttpStatus.BAD_REQUEST;
 
-            ProductCreateDTO productCreateDTO = buildProductCreateDTO(userId, EnumProductCategory.COFFEE, 3000, 1000,
+            ProductCreateDto productCreateDTO = buildProductCreateDTO(userId, EnumProductCategory.COFFEE, 3000, 1000,
                     "아이스 아메리카노", "아메리카노", "4344qq", LocalDate.now(), EnumProductSize.SMALL);
 
             Product product = productService.create(productCreateDTO);
@@ -149,9 +149,9 @@ class ProductControllerTest extends AbstractMvcTest {
         }
 
 
-        public static ProductCreateDTO buildProductCreateDTO(Long userId, EnumProductCategory category, Integer price, Integer cost, String productName,
+        public static ProductCreateDto buildProductCreateDTO(Long userId, EnumProductCategory category, Integer price, Integer cost, String productName,
                                                              String description, String barcode, LocalDate expirationDate, EnumProductSize size) {
-            return ProductCreateDTO.builder()
+            return ProductCreateDto.builder()
                     .userId(userId)
                     .category(category)
                     .price(price)
@@ -270,7 +270,7 @@ class ProductControllerTest extends AbstractMvcTest {
             Long userId = 1L;
             HttpStatus status = HttpStatus.OK;
 
-            ProductCreateDTO productCreateDTO = get.buildProductCreateDTO(userId, EnumProductCategory.COFFEE, 3000, 1000,
+            ProductCreateDto productCreateDTO = get.buildProductCreateDTO(userId, EnumProductCategory.COFFEE, 3000, 1000,
                     "아이스티", "ㅇㅇㅅㅌ", "456411qq", LocalDate.now(), EnumProductSize.SMALL);
 
             Product product = productService.create(productCreateDTO);

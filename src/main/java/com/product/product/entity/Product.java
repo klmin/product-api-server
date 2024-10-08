@@ -2,7 +2,7 @@ package com.product.product.entity;
 
 import com.product.util.KoreanUtil;
 import com.product.jpa.audit.AuditableEntity;
-import com.product.product.dto.ProductUpdateDTO;
+import com.product.product.dto.ProductUpdateDto;
 import com.product.product.enums.EnumProductCategory;
 import com.product.product.enums.EnumProductSize;
 import com.product.user.entity.User;
@@ -76,7 +76,7 @@ public class Product extends AuditableEntity {
 
     }
 
-    public void update(ProductUpdateDTO dto){
+    public void update(ProductUpdateDto dto){
         if(dto.getCategory() != null){
             this.category = dto.getCategory();
         }

@@ -1,6 +1,6 @@
 package com.product.user.request;
 
-import com.product.user.dto.UserUpdateDTO;
+import com.product.user.dto.UserUpdateDto;
 import com.product.user.enums.EnumUserType;
 import com.product.util.PatternUtil;
 import jakarta.validation.constraints.Pattern;
@@ -23,8 +23,8 @@ public record UserUpdateRequest
     String description
 )
 {
-    public UserUpdateDTO toDTO(Long userId){
-        return UserUpdateDTO.builder()
+    public UserUpdateDto toDTO(Long userId){
+        return UserUpdateDto.builder()
                 .userId(userId)
                 .userName(this.userName)
                 .userType(this.userType)

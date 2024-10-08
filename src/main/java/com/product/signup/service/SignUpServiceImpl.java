@@ -1,6 +1,7 @@
 package com.product.signup.service;
 
-import com.product.signup.dto.SignUpCreateDTO;
+import com.product.signup.dto.SignUpCreateDto;
+import com.product.user.entity.User;
 import com.product.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,8 +14,8 @@ public class SignUpServiceImpl implements SignUpService {
 
     private final UserService userService;
 
-    public void signUp(SignUpCreateDTO dto){
-        userService.create(dto.toUserCreateDTO());
+    public User signUp(SignUpCreateDto dto){
+        return userService.create(dto.toUserCreateDTO());
     }
 
 }

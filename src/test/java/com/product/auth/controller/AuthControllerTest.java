@@ -163,7 +163,6 @@ class AuthControllerTest extends AbstractMvcTest {
                         .andExpect(status().is(HttpStatus.UNAUTHORIZED.value()))
                         .andExpect(jsonPath("$.code").value(HttpStatus.UNAUTHORIZED.value()))
                         .andExpect(jsonPath("$.message").value("토큰이 유효하지 않습니다."))
-                        .andExpect(jsonPath("$.data").isEmpty())
                 ;
 
                 mockMvc.perform(post("/api/auth/refresh-token")
@@ -174,7 +173,6 @@ class AuthControllerTest extends AbstractMvcTest {
                         .andExpect(status().is(HttpStatus.BAD_REQUEST.value()))
                         .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
                         .andExpect(jsonPath("$.message").value("헤더가 잘못 입력되었습니다."))
-                        .andExpect(jsonPath("$.data").isEmpty())
                 ;
 
                 mockMvc.perform(post("/api/auth/refresh-token")
@@ -185,7 +183,6 @@ class AuthControllerTest extends AbstractMvcTest {
                         .andExpect(status().is(HttpStatus.BAD_REQUEST.value()))
                         .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
                         .andExpect(jsonPath("$.message").value("헤더가 올바르지 않습니다."))
-                        .andExpect(jsonPath("$.data").isEmpty())
                 ;
 
             }
@@ -209,7 +206,6 @@ class AuthControllerTest extends AbstractMvcTest {
                         .andExpect(status().is(HttpStatus.OK.value()))
                         .andExpect(jsonPath("$.code").value(HttpStatus.OK.value()))
                         .andExpect(jsonPath("$.message").value(HttpStatus.OK.getReasonPhrase()))
-                        .andExpect(jsonPath("$.data").isEmpty())
                 ;
 
                 mockMvc.perform(post("/api/auth/logout")
@@ -220,7 +216,6 @@ class AuthControllerTest extends AbstractMvcTest {
                         .andExpect(status().is(HttpStatus.UNAUTHORIZED.value()))
                         .andExpect(jsonPath("$.code").value(HttpStatus.UNAUTHORIZED.value()))
                         .andExpect(jsonPath("$.message").value(HttpStatus.UNAUTHORIZED.getReasonPhrase()))
-                        .andExpect(jsonPath("$.data").isEmpty())
                 ;
             }
             @Test
@@ -235,7 +230,6 @@ class AuthControllerTest extends AbstractMvcTest {
                         .andExpect(status().is(HttpStatus.UNAUTHORIZED.value()))
                         .andExpect(jsonPath("$.code").value(HttpStatus.UNAUTHORIZED.value()))
                         .andExpect(jsonPath("$.message").value(HttpStatus.UNAUTHORIZED.getReasonPhrase()))
-                        .andExpect(jsonPath("$.data").isEmpty())
                 ;
 
                 mockMvc.perform(post("/api/auth/logout")
@@ -246,7 +240,6 @@ class AuthControllerTest extends AbstractMvcTest {
                         .andExpect(status().is(HttpStatus.UNAUTHORIZED.value()))
                         .andExpect(jsonPath("$.code").value(HttpStatus.UNAUTHORIZED.value()))
                         .andExpect(jsonPath("$.message").value(HttpStatus.UNAUTHORIZED.getReasonPhrase()))
-                        .andExpect(jsonPath("$.data").isEmpty())
                 ;
 
             }

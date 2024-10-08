@@ -1,6 +1,6 @@
 package com.product.signup.dto;
 
-import com.product.user.dto.UserCreateDTO;
+import com.product.user.dto.UserCreateDto;
 import com.product.user.enums.EnumUserStatus;
 import com.product.user.enums.EnumUserType;
 import lombok.Builder;
@@ -10,7 +10,7 @@ import java.util.List;
 
 @Getter
 @Builder
-public class SignUpCreateDTO {
+public class SignUpCreateDto {
 
     private String loginId;
 
@@ -34,8 +34,8 @@ public class SignUpCreateDTO {
     @Builder.Default
     private List<String> roleIds = List.of("ROLE_OWNER");
 
-    public UserCreateDTO toUserCreateDTO() {
-        return UserCreateDTO.builder()
+    public UserCreateDto toUserCreateDTO() {
+        return UserCreateDto.builder()
                 .loginId(this.loginId)
                 .userName(this.userName)
                 .password(this.password)

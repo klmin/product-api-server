@@ -1,6 +1,6 @@
 package com.product.user.request;
 
-import com.product.user.dto.UserCreateDTO;
+import com.product.user.dto.UserCreateDto;
 import com.product.user.enums.EnumUserStatus;
 import com.product.user.enums.EnumUserType;
 import com.product.util.PatternUtil;
@@ -41,8 +41,8 @@ public record UserCreateRequest
     String description
 )
 {
-    public UserCreateDTO toDTO(){
-        return UserCreateDTO.builder()
+    public UserCreateDto toDTO(){
+        return UserCreateDto.builder()
                 .loginId(this.loginId)
                 .userName(this.userName)
                 .password(this.password)

@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class ProductListDTO {
+public class ProductListDto {
 
     private Long userId;
     private String searchKeyword;

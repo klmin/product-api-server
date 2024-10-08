@@ -3,9 +3,9 @@ package com.product.product.service;
 import com.product.api.exception.ApiRuntimeException;
 import com.product.api.response.pagination.CursorPaginationResponse;
 import com.product.config.security.WithMockUserCustom;
-import com.product.product.dto.ProductCreateDTO;
-import com.product.product.dto.ProductListDTO;
-import com.product.product.dto.ProductUpdateDTO;
+import com.product.product.dto.ProductCreateDto;
+import com.product.product.dto.ProductListDto;
+import com.product.product.dto.ProductUpdateDto;
 import com.product.product.entity.Product;
 import com.product.product.enums.EnumProductCategory;
 import com.product.product.enums.EnumProductSize;
@@ -47,13 +47,13 @@ class ProductServiceImplTest {
         @Test
         void success(){
 
-            ProductListDTO productListDTO = ProductListDTO.builder().userId(1L).lastCursorId(12L).searchKeyword("ㅇㅁㄹ").build();
+            ProductListDto productListDTO = ProductListDto.builder().userId(1L).lastCursorId(12L).searchKeyword("ㅇㅁㄹ").build();
             CursorPaginationResponse<List<ProductListResponse>> list = productService.list(productListDTO);
 
             assertNotNull(list);
 
-            ProductListDTO initialProductListDTO = ProductListDTO.builder().userId(2L).lastCursorId(25L).searchKeyword("ㅇㅅ").build();
-            CursorPaginationResponse<List<ProductListResponse>> initiallist = productService.list(initialProductListDTO);
+            ProductListDto initialProductListDto = ProductListDto.builder().userId(2L).lastCursorId(25L).searchKeyword("ㅇㅅ").build();
+            CursorPaginationResponse<List<ProductListResponse>> initiallist = productService.list(initialProductListDto);
             assertNotNull(initiallist);
 
         }
@@ -62,13 +62,13 @@ class ProductServiceImplTest {
         @Test
         void fail(){
 
-            ProductListDTO productListDTO = ProductListDTO.builder().userId(2L).lastCursorId(10000L).searchKeyword("아메리카노노").build();
+            ProductListDto productListDTO = ProductListDto.builder().userId(2L).lastCursorId(10000L).searchKeyword("아메리카노노").build();
             CursorPaginationResponse<List<ProductListResponse>> list = productService.list(productListDTO);
 
             assertNotNull(list);
 
-            ProductListDTO initialProductListDTO = ProductListDTO.builder().userId(2L).lastCursorId(10000L).searchKeyword("ㅇㅁㄹㅋㄴㄴ").build();
-            CursorPaginationResponse<List<ProductListResponse>> initiallist = productService.list(initialProductListDTO);
+            ProductListDto initialProductListDto = ProductListDto.builder().userId(2L).lastCursorId(10000L).searchKeyword("ㅇㅁㄹㅋㄴㄴ").build();
+            CursorPaginationResponse<List<ProductListResponse>> initiallist = productService.list(initialProductListDto);
             assertNotNull(initiallist);
         }
 
@@ -121,7 +121,7 @@ class ProductServiceImplTest {
 
             int beforeSize = productService.findByUserId(userId, ProductByUserIdProjection.class).size();
 
-            ProductCreateDTO productCreateDTO = buildProductCreateDTO(userId, category, price, cost, productName, description, barcode, expirationDate, size);
+            ProductCreateDto productCreateDTO = buildProductCreateDTO(userId, category, price, cost, productName, description, barcode, expirationDate, size);
             Product product = productService.create(productCreateDTO);
             assertEquals(product.getUser().getUserId(), userId);
             assertEquals(product.getCategory(), category);
@@ -145,7 +145,7 @@ class ProductServiceImplTest {
         void fail(Long userId, EnumProductCategory category, Integer price, Integer cost, String productName,
                   String description, String barcode, LocalDate expirationDate, EnumProductSize size, Class<? extends Throwable> clazz) {
 
-            ProductCreateDTO productCreateDTO = buildProductCreateDTO(userId, category, price, cost, productName, description, barcode, expirationDate, size);
+            ProductCreateDto productCreateDTO = buildProductCreateDTO(userId, category, price, cost, productName, description, barcode, expirationDate, size);
 
             assertThrows(clazz, () -> productService.create(productCreateDTO), "예외 발생 해야함.");
 
@@ -170,9 +170,9 @@ class ProductServiceImplTest {
             );
         }
 
-        public static ProductCreateDTO buildProductCreateDTO(Long userId, EnumProductCategory category, Integer price, Integer cost, String productName,
-                                                       String description, String barcode, LocalDate expirationDate, EnumProductSize size) {
-            return ProductCreateDTO.builder()
+        public static ProductCreateDto buildProductCreateDTO(Long userId, EnumProductCategory category, Integer price, Integer cost, String productName,
+                                                             String description, String barcode, LocalDate expirationDate, EnumProductSize size) {
+            return ProductCreateDto.builder()
                     .userId(userId)
                     .category(category)
                     .price(price)
@@ -200,7 +200,7 @@ class ProductServiceImplTest {
                      String description, String barcode, LocalDate expirationDate, EnumProductSize size, Integer afterPrice){
 
 
-            ProductUpdateDTO productUpdateDTO = buildProductUpdateDTO(productId, userId, category, price, cost, productName, description, barcode, expirationDate, size);
+            ProductUpdateDto productUpdateDTO = buildProductUpdateDTO(productId, userId, category, price, cost, productName, description, barcode, expirationDate, size);
             Product product = productService.update(productUpdateDTO);
             Integer beforePrice = product.getPrice();
 
@@ -214,9 +214,9 @@ class ProductServiceImplTest {
             assertEquals(product.getExpirationDate(), expirationDate);
             assertEquals(product.getSize(), size);
 
-            ProductUpdateDTO productUpdateDTOCategory = buildProductUpdateDTO(product.getProductId(), userId, null, afterPrice, null, null, null, null, null, null);
+            ProductUpdateDto productUpdateDtoCategory = buildProductUpdateDTO(product.getProductId(), userId, null, afterPrice, null, null, null, null, null, null);
 
-            product.update(productUpdateDTOCategory);
+            product.update(productUpdateDtoCategory);
 
             assertEquals(product.getCategory(), category);
             assertEquals(product.getPrice(), afterPrice);
@@ -243,7 +243,7 @@ class ProductServiceImplTest {
                 sb.append("aa");
             }
 
-            ProductUpdateDTO productUpdateDTO = buildProductUpdateDTO(productId, userId, null, null, null, null, null, sb.toString(), null, null);
+            ProductUpdateDto productUpdateDTO = buildProductUpdateDTO(productId, userId, null, null, null, null, null, sb.toString(), null, null);
 
             Product product = productService.update(productUpdateDTO);
             assertEquals(sb.toString(), product.getBarcode());
@@ -264,9 +264,9 @@ class ProductServiceImplTest {
         }
 
 
-        public static ProductUpdateDTO buildProductUpdateDTO(Long productId, Long userId, EnumProductCategory category, Integer price, Integer cost, String productName,
+        public static ProductUpdateDto buildProductUpdateDTO(Long productId, Long userId, EnumProductCategory category, Integer price, Integer cost, String productName,
                                                              String description, String barcode, LocalDate expirationDate, EnumProductSize size) {
-            return ProductUpdateDTO.builder()
+            return ProductUpdateDto.builder()
                     .productId(productId)
                     .userId(userId)
                     .category(category)
@@ -292,7 +292,7 @@ class ProductServiceImplTest {
 
             Long userId = 2L;
 
-            ProductCreateDTO productCreateDTO = create.buildProductCreateDTO(userId, EnumProductCategory.COFFEE, 3000, 1000,
+            ProductCreateDto productCreateDTO = create.buildProductCreateDTO(userId, EnumProductCategory.COFFEE, 3000, 1000,
                     "아이스 아메리카노", "아메리카노", "12121212", LocalDate.now(), EnumProductSize.SMALL);
 
             List<ProductByUserIdProjection> initialAfterProjection = productService.findByUserId(userId, ProductByUserIdProjection.class);

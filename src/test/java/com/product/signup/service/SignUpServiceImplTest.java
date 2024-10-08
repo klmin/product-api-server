@@ -1,10 +1,9 @@
 package com.product.signup.service;
 
-import com.product.signup.dto.SignUpCreateDTO;
+import com.product.signup.dto.SignUpCreateDto;
+import com.product.user.entity.User;
 import com.product.user.enums.EnumUserStatus;
 import com.product.user.enums.EnumUserType;
-import com.product.user.response.UserGetResponse;
-import com.product.user.service.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -29,8 +28,6 @@ class SignUpServiceImplTest {
     @Autowired
     private SignUpService signUpService;
 
-    @Autowired
-    private UserService userService;
 
     @Nested
     @DisplayName("회원가입 서비스 테스트")
@@ -39,21 +36,19 @@ class SignUpServiceImplTest {
         @DisplayName("회원가입 서비스 성공 테스트")
         @ParameterizedTest
         @MethodSource
-        void success (String loginId, String userName, String password, String email, String description) {
+        void success(String loginId, String userName, String password, String email, String description) {
 
-            SignUpCreateDTO request = buildSignUpCreateDTO(loginId, userName, password, email, description);
+            SignUpCreateDto request = buildSignUpCreateDTO(loginId, userName, password, email, description);
 
-            signUpService.signUp(request);
+            User user = signUpService.signUp(request);
 
-            UserGetResponse response = userService.findByLoginId(loginId, UserGetResponse.class);
-
-            assertEquals(response.loginId(), loginId);
-            assertEquals(response.userName(), userName);
-            assertEquals(EnumUserType.OWNER, response.userType());
-            assertEquals(EnumUserStatus.ACTIVE, response.status());
-            assertEquals(response.email(), email);
-            assertEquals(response.mobile(), loginId);
-            assertEquals(response.description(), description);
+            assertEquals(user.getLoginId(), loginId);
+            assertEquals(user.getUserName(), userName);
+            assertEquals(EnumUserType.OWNER, user.getUserType());
+            assertEquals(EnumUserStatus.ACTIVE, user.getStatus());
+            assertEquals(user.getEmail(), email);
+            assertEquals(user.getMobile(), loginId);
+            assertEquals(user.getDescription(), description);
 
         }
 
@@ -62,7 +57,7 @@ class SignUpServiceImplTest {
         @MethodSource
         void fail(String loginId, String userName, String password, String email, String description, Class<? extends Throwable> clazz){
 
-            SignUpCreateDTO request = buildSignUpCreateDTO(loginId, userName, password, email, description);
+            SignUpCreateDto request = buildSignUpCreateDTO(loginId, userName, password, email, description);
             assertThrows(clazz, () -> signUpService.signUp(request), "예외가 발생해야함.");
         }
 
@@ -82,8 +77,8 @@ class SignUpServiceImplTest {
         }
     }
 
-    private SignUpCreateDTO buildSignUpCreateDTO(String loginId, String userName, String password, String email, String description) {
-        return SignUpCreateDTO.builder()
+    private SignUpCreateDto buildSignUpCreateDTO(String loginId, String userName, String password, String email, String description) {
+        return SignUpCreateDto.builder()
                 .loginId(loginId)
                 .userName(userName)
                 .password(password)

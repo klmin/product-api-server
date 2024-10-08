@@ -2,7 +2,7 @@ package com.product.rolehierarchy.service;
 
 
 import com.product.api.exception.ApiRuntimeException;
-import com.product.rolehierarchy.dto.RoleHierarchyListDTO;
+import com.product.rolehierarchy.dto.RoleHierarchyListDto;
 import com.product.rolehierarchy.repository.RoleHierarchyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,7 +19,7 @@ public class RoleHierarchyServiceImpl implements RoleHierarchyService{
 
     @Override
     public String getRoleHierarchyString(){
-        return repository.findAllBy(RoleHierarchyListDTO.class).stream()
+        return repository.findAllBy(RoleHierarchyListDto.class).stream()
                 .map(hierarchy -> hierarchy.childId() + " > " + hierarchy.parentId())
                 .collect(Collectors.joining("\n"));
     }

@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @Builder
 @Getter
-public class UserUpdateDTO {
+public class UserUpdateDto {
 
     private Long userId;
     private String userName;

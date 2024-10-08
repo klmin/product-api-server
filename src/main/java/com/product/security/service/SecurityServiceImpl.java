@@ -3,7 +3,7 @@ package com.product.security.service;
 
 import com.product.redis.constants.RedisCacheNames;
 import com.product.redis.service.RedisService;
-import com.product.security.dto.SecurityDTO;
+import com.product.security.dto.SecurityDto;
 import com.product.user.enums.EnumUserStatus;
 import com.product.user.projection.UserProjection;
 import com.product.user.projection.UserStatusProjection;
@@ -22,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Service
@@ -42,7 +41,7 @@ public class SecurityServiceImpl implements SecurityService {
         UserProjection userProjection = userService.loadUserByLoginId(id, EnumUserStatus.ACTIVE, UserProjection.class);
         Collection<UserRoleProjection> userRoleProjection = userRoleService.loadRoleByUserId(userProjection.userId(), UserRoleProjection.class);
 
-        return SecurityDTO.builder()
+        return SecurityDto.builder()
                         .userId(userProjection.userId())
                         .loginId(userProjection.loginId())
                         .password(userProjection.password())

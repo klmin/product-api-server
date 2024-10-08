@@ -1,13 +1,11 @@
-package com.product.role.dto;
+package com.product.userrole.dto;
 
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @Builder
-public class RoleCreateDTO {
-
+public class UserRoleCreateDto {
+    private Long userId;
     private String roleId;
-    private String roleName;
-
 }
