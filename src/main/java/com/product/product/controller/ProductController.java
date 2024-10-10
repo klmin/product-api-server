@@ -6,10 +6,9 @@ import com.product.product.mapper.ProductMapper;
 import com.product.product.request.ProductCreateRequest;
 import com.product.product.request.ProductListRequest;
 import com.product.product.request.ProductUpdateRequest;
-import com.product.product.response.ProductGetResponse;
-import com.product.product.response.ProductListResponse;
+import com.product.product.response.ProductDetailResponse;
+import com.product.product.response.ProductResponse;
 import com.product.product.service.ProductService;
-
 import com.product.security.dto.SecurityDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -28,17 +27,16 @@ public class ProductController {
     private final ProductMapper productMapper;
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<ProductListResponse>>> list(@ModelAttribute @Valid ProductListRequest request,
-                                                                        @AuthenticationPrincipal SecurityDto securityDto){
+    public ResponseEntity<ApiResponse<List<ProductResponse>>> list(@ModelAttribute @Valid ProductListRequest request){
 
-        CursorPaginationResponse<List<ProductListResponse>> response = productService.list(productMapper.toListDto(request, securityDto.getUserId()));
+        CursorPaginationResponse<List<ProductResponse>> response = productService.list(productMapper.toListDto(request));
         return ApiResponse.success(response.getList(),response.toPaginationResponse());
     }
 
     @GetMapping("/{productId}")
-    public ResponseEntity<ApiResponse<ProductGetResponse>> get(@PathVariable Long productId, @AuthenticationPrincipal SecurityDto securityDto){
-        ProductGetResponse productGetResponse = productService.findByProductIdAndUserUserId(productId, securityDto.getUserId(), ProductGetResponse.class);
-        return ApiResponse.success(productGetResponse);
+    public ResponseEntity<ApiResponse<ProductDetailResponse>> get(@PathVariable Long productId){
+        ProductDetailResponse productDetailResponse = productService.findByProductId(productId, ProductDetailResponse.class);
+        return ApiResponse.success(productDetailResponse);
     }
 
     @PostMapping

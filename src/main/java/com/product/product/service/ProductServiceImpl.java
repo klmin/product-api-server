@@ -10,10 +10,11 @@ import com.product.product.entity.Product;
 import com.product.product.mapper.ProductMapper;
 import com.product.product.repository.ProductQueryDslRepository;
 import com.product.product.repository.ProductRepository;
-import com.product.product.response.ProductListResponse;
+import com.product.product.response.ProductResponse;
 import com.product.user.entity.User;
 import com.product.user.service.UserService;
 import com.product.util.KoreanUtil;
+import com.product.util.MessageConstants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,10 +33,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional(readOnly = true)
-    public CursorPaginationResponse<List<ProductListResponse>> list(ProductListDto dto) {
+    public CursorPaginationResponse<List<ProductResponse>> list(ProductListDto dto) {
 
         List<ProductListData> list = productQueryDslRepository.list(productMapper.toListQuery(dto));
-        List<ProductListResponse> dataList = productMapper.toListResponse(list);
+        List<ProductResponse> dataList = productMapper.toListResponse(list);
 
         Long nextCursor = !list.isEmpty() ? dataList.getLast().productId() : null;
         boolean isNext = list.size() == dto.getLimit();
@@ -46,13 +47,13 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional(readOnly = true)
     public <T> T findByProductId(Long productId, Class<T> clazz) {
-        return productRepository.findByProductId(productId, clazz).orElseThrow(() -> new ApiRuntimeException("데이터가 존재하지 않습니다."));
+        return productRepository.findByProductId(productId, clazz).orElseThrow(() -> new ApiRuntimeException(MessageConstants.NO_DATA_MESSAGE));
     }
 
     @Override
     @Transactional(readOnly = true)
     public <T> T findByProductIdAndUserUserId(Long productId, Long userId, Class<T> clazz) {
-        return productRepository.findByProductIdAndUserUserId(productId, userId, clazz).orElseThrow(() -> new ApiRuntimeException("데이터가 존재하지 않습니다."));
+        return productRepository.findByProductIdAndUserUserId(productId, userId, clazz).orElseThrow(() -> new ApiRuntimeException(MessageConstants.NO_DATA_MESSAGE));
     }
 
     @Override
@@ -73,7 +74,7 @@ public class ProductServiceImpl implements ProductService {
     public Product update(ProductUpdateDto dto) {
 
         Product product = productRepository.findByProductIdAndUserUserId(dto.getProductId(), dto.getUserId(), Product.class)
-                                           .orElseThrow(() -> new ApiRuntimeException("데이터가 존재하지 않습니다."));
+                                           .orElseThrow(() -> new ApiRuntimeException(MessageConstants.NO_DATA_MESSAGE));
 
         product.update(dto);
 
@@ -84,7 +85,7 @@ public class ProductServiceImpl implements ProductService {
     public void delete(Long productId, Long userId) {
         long deleteCnt = productQueryDslRepository.deleteByProductAndUserId(productId, userId);
         if(deleteCnt == 0){
-            throw new ApiRuntimeException("삭제에 실패했습니다.");
+            throw new ApiRuntimeException(MessageConstants.DELETE_FAIL_MESSAGE);
         }
     }
 

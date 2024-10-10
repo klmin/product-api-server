@@ -9,7 +9,7 @@ import com.product.product.query.ProductListQuery;
 import com.product.product.request.ProductCreateRequest;
 import com.product.product.request.ProductListRequest;
 import com.product.product.request.ProductUpdateRequest;
-import com.product.product.response.ProductListResponse;
+import com.product.product.response.ProductResponse;
 import com.product.user.entity.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -19,9 +19,10 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface ProductMapper {
 
-    ProductListDto toListDto(ProductListRequest request, Long userId);
+    @Mapping(target="limit", defaultValue = "10")
+    ProductListDto toListDto(ProductListRequest request);
     ProductListQuery toListQuery(ProductListDto dto);
-    List<ProductListResponse> toListResponse(List<ProductListData> dataList);
+    List<ProductResponse> toListResponse(List<ProductListData> dataList);
 
     ProductCreateDto toCreateDto(ProductCreateRequest request, Long userId);
     @Mapping(target="description", source="dto.description")

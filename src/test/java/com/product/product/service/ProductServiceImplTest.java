@@ -10,8 +10,8 @@ import com.product.product.entity.Product;
 import com.product.product.enums.EnumProductCategory;
 import com.product.product.enums.EnumProductSize;
 import com.product.product.projection.ProductByUserIdProjection;
-import com.product.product.response.ProductGetResponse;
-import com.product.product.response.ProductListResponse;
+import com.product.product.response.ProductDetailResponse;
+import com.product.product.response.ProductResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -47,13 +47,13 @@ class ProductServiceImplTest {
         @Test
         void success(){
 
-            ProductListDto productListDTO = ProductListDto.builder().userId(1L).lastCursorId(12L).searchKeyword("ㅇㅁㄹ").build();
-            CursorPaginationResponse<List<ProductListResponse>> list = productService.list(productListDTO);
+            ProductListDto productListDTO = ProductListDto.builder().lastCursorId(12L).limit(10).searchKeyword("ㅇㅁㄹ").build();
+            CursorPaginationResponse<List<ProductResponse>> list = productService.list(productListDTO);
 
             assertNotNull(list);
 
-            ProductListDto initialProductListDto = ProductListDto.builder().userId(2L).lastCursorId(25L).searchKeyword("ㅇㅅ").build();
-            CursorPaginationResponse<List<ProductListResponse>> initiallist = productService.list(initialProductListDto);
+            ProductListDto initialProductListDto = ProductListDto.builder().lastCursorId(25L).limit(10).searchKeyword("ㅇㅅ").build();
+            CursorPaginationResponse<List<ProductResponse>> initiallist = productService.list(initialProductListDto);
             assertNotNull(initiallist);
 
         }
@@ -62,13 +62,13 @@ class ProductServiceImplTest {
         @Test
         void fail(){
 
-            ProductListDto productListDTO = ProductListDto.builder().userId(2L).lastCursorId(10000L).searchKeyword("아메리카노노").build();
-            CursorPaginationResponse<List<ProductListResponse>> list = productService.list(productListDTO);
+            ProductListDto productListDTO = ProductListDto.builder().lastCursorId(10000L).limit(10).searchKeyword("아메리카노노").build();
+            CursorPaginationResponse<List<ProductResponse>> list = productService.list(productListDTO);
 
             assertNotNull(list);
 
-            ProductListDto initialProductListDto = ProductListDto.builder().userId(2L).lastCursorId(10000L).searchKeyword("ㅇㅁㄹㅋㄴㄴ").build();
-            CursorPaginationResponse<List<ProductListResponse>> initiallist = productService.list(initialProductListDto);
+            ProductListDto initialProductListDto = ProductListDto.builder().lastCursorId(10000L).limit(10).searchKeyword("ㅇㅁㄹㅋㄴㄴ").build();
+            CursorPaginationResponse<List<ProductResponse>> initiallist = productService.list(initialProductListDto);
             assertNotNull(initiallist);
         }
 
@@ -76,20 +76,31 @@ class ProductServiceImplTest {
 
     @Nested
     @DisplayName("상품 조회 서비스 테스트")
-    class findByProductIdAndUserUserId{
+    class findByProductId{
 
         @DisplayName("상품 조회 서비스 성공 테스트")
-        @Test
-        void success(){
+        @ParameterizedTest
+        @MethodSource("success")
+        void success(Long userId, EnumProductCategory category, Integer price, Integer cost, String productName,
+                     String description, String barcode, LocalDate expirationDate, EnumProductSize size){
 
-            Long userId = 1L;
-            Long productId = 1L;
 
-            ProductGetResponse productGetResponse = productService.findByProductIdAndUserUserId(productId, userId, ProductGetResponse.class);
+            ProductCreateDto dto = buildProductCreateDto(userId, category, price, cost, productName, description, barcode, expirationDate, size);
 
-            assertEquals(productGetResponse.productId(), productId);
-            assertEquals(productGetResponse.userUserId(), userId);
-            assertEquals(4000, productGetResponse.price());
+            Product product = productService.create(dto);
+
+            ProductDetailResponse productDetailResponse = productService.findByProductId(product.getProductId(), ProductDetailResponse.class);
+
+            assertEquals(productDetailResponse.productId(), product.getProductId());
+            assertEquals(productDetailResponse.userUserId(), userId);
+            assertEquals(productDetailResponse.category(), category);
+            assertEquals(productDetailResponse.price(), price);
+            assertEquals(productDetailResponse.cost(), cost);
+            assertEquals(productDetailResponse.productName(), productName);
+            assertEquals(productDetailResponse.description(), description);
+            assertEquals(productDetailResponse.barcode(), barcode);
+            assertEquals(productDetailResponse.expirationDate(), expirationDate);
+            assertEquals(productDetailResponse.size(), size);
 
         }
 
@@ -107,6 +118,32 @@ class ProductServiceImplTest {
             assertEquals("데이터가 존재하지 않습니다.", findByProductIdAndUserUserIdFail.getMessage());
         }
 
+        private static Stream<Arguments> success() {
+            return Stream.of(
+                    Arguments.of(1L, EnumProductCategory.COFFEE, 3000, 1000, "테스트 아이스크림",
+                            "ㅌㅅㅌ ㅇㅇㅅㅋㄹ", "19a082098", LocalDate.now(), EnumProductSize.SMALL),
+                    Arguments.of(1L, EnumProductCategory.COFFEE, 4000, 1500, "테스트 라떼",
+                            "ㅌㅅㅌ ㄹㄸ", "1rrqo12", LocalDate.now(), EnumProductSize.SMALL),
+                    Arguments.of(2L, EnumProductCategory.TEA, 5000, 2000, "테스트 캐모마일",
+                            "ㅌㅅㅌ ㅋㅁㅁㅇ", "12142323aa", LocalDate.now(), EnumProductSize.LARGE)
+            );
+        }
+
+        public static ProductCreateDto buildProductCreateDto(Long userId, EnumProductCategory category, Integer price, Integer cost, String productName,
+                                                                     String description, String barcode, LocalDate expirationDate, EnumProductSize size) {
+            return ProductCreateDto.builder()
+                    .userId(userId)
+                    .category(category)
+                    .price(price)
+                    .cost(cost)
+                    .productName(productName)
+                    .description(description)
+                    .barcode(barcode)
+                    .expirationDate(expirationDate)
+                    .size(size)
+                    .build();
+        }
+
     }
 
     @Nested
@@ -115,7 +152,7 @@ class ProductServiceImplTest {
 
         @DisplayName("상품 등록 서비스 성공 테스트")
         @ParameterizedTest
-        @MethodSource
+        @MethodSource("success")
         void success(Long userId, EnumProductCategory category, Integer price, Integer cost, String productName, String productNameInitials,
                      String description, String barcode, LocalDate expirationDate, EnumProductSize size) {
 
@@ -141,7 +178,7 @@ class ProductServiceImplTest {
 
         @DisplayName("상품 등록 서비스 실패 테스트")
         @ParameterizedTest
-        @MethodSource
+        @MethodSource("fail")
         void fail(Long userId, EnumProductCategory category, Integer price, Integer cost, String productName,
                   String description, String barcode, LocalDate expirationDate, EnumProductSize size, Class<? extends Throwable> clazz) {
 
@@ -195,7 +232,7 @@ class ProductServiceImplTest {
 
         @DisplayName("상품 수정 서비스 성공 테스트")
         @ParameterizedTest
-        @MethodSource
+        @MethodSource("success")
         void success(Long productId, Long userId, EnumProductCategory category, Integer price, Integer cost, String productName, String productNameInitials,
                      String description, String barcode, LocalDate expirationDate, EnumProductSize size, Integer afterPrice){
 
@@ -239,9 +276,7 @@ class ProductServiceImplTest {
             Long userId = 1L;
             Long productId = 1L;
             StringBuilder sb = new StringBuilder();
-            for(int i = 0; i< 100; i++){
-                sb.append("aa");
-            }
+            sb.append("aa".repeat(100));
 
             ProductUpdateDto productUpdateDTO = buildProductUpdateDTO(productId, userId, null, null, null, null, null, sb.toString(), null, null);
 
@@ -312,7 +347,7 @@ class ProductServiceImplTest {
             int deleteAfterSize = deleteAfterProjection.size();
 
             assertTrue(deleteAfterSize < createAfterSize);
-            assertTrue(initialAfterSize == deleteAfterSize);
+            assertEquals(initialAfterSize, deleteAfterSize);
 
         }
 

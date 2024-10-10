@@ -7,7 +7,6 @@ import lombok.Getter;
 @Getter
 public class ProductListQuery {
 
-    private Long userId;
     private String searchKeyword;
     private Integer limit;
     private Long lastCursorId;

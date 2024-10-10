@@ -39,7 +39,7 @@ class AuthControllerTest extends AbstractMvcTest {
 
         @DisplayName("로그인 컨트롤러 성공 테스트")
         @ParameterizedTest
-        @MethodSource
+        @MethodSource("success")
         void success (String loginId, String password, HttpStatus status) throws Exception {
 
             AuthLoginRequest request = buildAuthLoginRequest(loginId, password);
@@ -62,7 +62,7 @@ class AuthControllerTest extends AbstractMvcTest {
 
         @DisplayName("로그인 컨트롤러 실패 테스트")
         @ParameterizedTest
-        @MethodSource
+        @MethodSource("fail")
         void fail (String loginId, String password, HttpStatus status) throws Exception {
 
             AuthLoginRequest request = buildAuthLoginRequest(loginId, password);

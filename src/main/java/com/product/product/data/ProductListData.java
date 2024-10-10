@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 public class ProductListData{
 
     private Long productId;
+    private Long userId;
     private EnumProductCategory category;
     private Integer price;
     private Integer cost;
@@ -21,10 +22,11 @@ public class ProductListData{
     private LocalDateTime regDttm;
 
     @QueryProjection
-    public ProductListData(Long productId, EnumProductCategory category, Integer price, Integer cost,
+    public ProductListData(Long productId, Long userId, EnumProductCategory category, Integer price, Integer cost,
                            String productName, String description, String barcode, EnumProductSize size,
                            LocalDateTime regDttm) {
         this.productId = productId;
+        this.userId = userId;
         this.category = category;
         this.price = price;
         this.cost = cost;

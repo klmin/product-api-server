@@ -46,7 +46,6 @@ class ProductControllerTest extends AbstractMvcTest {
 
         @DisplayName("상품 리스트 컨트롤러 성공 테스트")
         @Test
-        @WithMockUserCustom(userId=1L)
         void success() throws Exception{
 
             HttpStatus status = HttpStatus.OK;
@@ -77,7 +76,7 @@ class ProductControllerTest extends AbstractMvcTest {
 
             HttpStatus status = HttpStatus.OK;
 
-            ProductListRequest productListRequest = ProductListRequest.builder().lastCursorId(10000L).searchKeyword("아메리카노노").build();
+            ProductListRequest productListRequest = ProductListRequest.builder().lastCursorId(10000L).limit(10).searchKeyword("아메리카노노").build();
 
             Map<String, String> editMap = objectMapper.convertValue(productListRequest, new TypeReference<>() {});
 
@@ -108,7 +107,6 @@ class ProductControllerTest extends AbstractMvcTest {
 
         @DisplayName("상품 조회 컨트롤러 성공 테스트")
         @Test
-        @WithMockUserCustom(userId=1L)
         void success() throws Exception {
 
             Long userId = 1L;
@@ -132,20 +130,14 @@ class ProductControllerTest extends AbstractMvcTest {
         @Test
         void fail() throws Exception{
 
-            Long userId = 2L;
             HttpStatus status = HttpStatus.BAD_REQUEST;
 
-            ProductCreateDto productCreateDTO = buildProductCreateDTO(userId, EnumProductCategory.COFFEE, 3000, 1000,
-                    "아이스 아메리카노", "아메리카노", "4344qq", LocalDate.now(), EnumProductSize.SMALL);
-
-            Product product = productService.create(productCreateDTO);
-
-            mockMvc.perform(get("/api/products/"+product.getProductId())
+            mockMvc.perform(get("/api/products/aa11")
                             .contentType(MediaType.APPLICATION_JSON))
                     .andDo(print())
                     .andExpect(status().is(status.value()))
                     .andExpect(jsonPath("$.code").value(status.value()))
-                    .andExpect(jsonPath("$.message").value("데이터가 존재하지 않습니다."));
+                    .andExpect(jsonPath("$.message").value(status.getReasonPhrase()));
         }
 
 
@@ -174,7 +166,7 @@ class ProductControllerTest extends AbstractMvcTest {
 
         @DisplayName("상품 등록 컨트롤러 성공 테스트")
         @ParameterizedTest
-        @MethodSource
+        @MethodSource("success")
         void success(EnumProductCategory category, Integer price, Integer cost, String productName,
                      String description, String barcode, LocalDate expirationDate, EnumProductSize size) throws Exception {
 
@@ -262,7 +254,7 @@ class ProductControllerTest extends AbstractMvcTest {
 
         @DisplayName("상품 수정 컨트롤러 성공 테스트")
         @ParameterizedTest
-        @MethodSource
+        @MethodSource("success")
         @WithMockUserCustom(userId=1L)
         void success(EnumProductCategory category, Integer price, Integer cost, String productName,
                      String description, String barcode, LocalDate expirationDate, EnumProductSize size) throws Exception {

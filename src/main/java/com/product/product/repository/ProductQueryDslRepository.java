@@ -2,11 +2,8 @@ package com.product.product.repository;
 
 import com.product.product.data.ProductListData;
 import com.product.product.data.QProductListData;
-import com.product.product.entity.QProduct;
 import com.product.product.query.ProductListQuery;
-import com.product.product.response.ProductListResponse;
 import com.product.util.KoreanUtil;
-import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.NumberTemplate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -15,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.product.product.entity.QProduct.product;
 import static com.querydsl.core.types.dsl.Expressions.numberTemplate;
@@ -33,8 +31,7 @@ public class ProductQueryDslRepository {
 
     public List<ProductListData> list(ProductListQuery query){
 
-        BooleanExpression booleanExpression = product.user.userId.eq(query.getUserId())
-                .and(lastCursorIdCondition(query.getLastCursorId()));
+        BooleanExpression booleanExpression = lastCursorIdCondition(query.getLastCursorId());
 
         String searchKeyword = query.getSearchKeyword();
         String initials = KoreanUtil.extractInitials(searchKeyword);
@@ -44,11 +41,12 @@ public class ProductQueryDslRepository {
         BooleanExpression searchCondition = createOrCondition(productNameCondition, productNameInitialsCondition);
 
         if (searchCondition != null) {
-            booleanExpression = booleanExpression.and(searchCondition);
+            booleanExpression = Optional.ofNullable(booleanExpression).map(e -> e.and(searchCondition)).orElseGet(() -> searchCondition);
         }
 
         return jpaQueryFactory.select(new QProductListData(
                         product.productId,
+                        product.user.userId,
                         product.category,
                         product.price,
                         product.cost,
@@ -62,22 +60,6 @@ public class ProductQueryDslRepository {
                 .orderBy(product.productId.desc())
                 .limit(query.getLimit())
                 .fetch();
-
-//        return jpaQueryFactory.select(Projections.constructor(ProductListData.class,
-//                        product.productId,
-//                        product.category,
-//                        product.price,
-//                        product.cost,
-//                        product.productName,
-//                        product.description,
-//                        product.barcode,
-//                        product.size,
-//                        product.regDttm))
-//                .from(product)
-//                .where(booleanExpression)
-//                .orderBy(product.productId.desc())
-//                .limit(query.getLimit())
-//                .fetch();
 
     }
 
