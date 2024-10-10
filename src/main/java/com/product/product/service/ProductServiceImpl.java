@@ -2,6 +2,7 @@ package com.product.product.service;
 
 import com.product.api.exception.ApiRuntimeException;
 import com.product.api.response.pagination.CursorPaginationResponse;
+import com.product.messagesource.service.MessageSourceService;
 import com.product.product.data.ProductListData;
 import com.product.product.dto.ProductCreateDto;
 import com.product.product.dto.ProductListDto;
@@ -14,12 +15,14 @@ import com.product.product.response.ProductResponse;
 import com.product.user.entity.User;
 import com.product.user.service.UserService;
 import com.product.util.KoreanUtil;
-import com.product.util.MessageConstants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
+import static com.product.util.MessageConstants.DELETE_FAILED;
+import static com.product.util.MessageConstants.NO_DATA_FOUND;
 
 @Service
 @Transactional
@@ -30,6 +33,7 @@ public class ProductServiceImpl implements ProductService {
     private final ProductQueryDslRepository productQueryDslRepository;
     private final UserService userService;
     private final ProductMapper productMapper;
+    private final MessageSourceService messageSourceService;
 
     @Override
     @Transactional(readOnly = true)
@@ -47,13 +51,13 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional(readOnly = true)
     public <T> T findByProductId(Long productId, Class<T> clazz) {
-        return productRepository.findByProductId(productId, clazz).orElseThrow(() -> new ApiRuntimeException(MessageConstants.NO_DATA_MESSAGE));
+        return productRepository.findByProductId(productId, clazz).orElseThrow(() -> new ApiRuntimeException(messageSourceService.getMessage(NO_DATA_FOUND)));
     }
 
     @Override
     @Transactional(readOnly = true)
     public <T> T findByProductIdAndUserUserId(Long productId, Long userId, Class<T> clazz) {
-        return productRepository.findByProductIdAndUserUserId(productId, userId, clazz).orElseThrow(() -> new ApiRuntimeException(MessageConstants.NO_DATA_MESSAGE));
+        return productRepository.findByProductIdAndUserUserId(productId, userId, clazz).orElseThrow(() -> new ApiRuntimeException(messageSourceService.getMessage(NO_DATA_FOUND)));
     }
 
     @Override
@@ -74,7 +78,7 @@ public class ProductServiceImpl implements ProductService {
     public Product update(ProductUpdateDto dto) {
 
         Product product = productRepository.findByProductIdAndUserUserId(dto.getProductId(), dto.getUserId(), Product.class)
-                                           .orElseThrow(() -> new ApiRuntimeException(MessageConstants.NO_DATA_MESSAGE));
+                                           .orElseThrow(() -> new ApiRuntimeException(messageSourceService.getMessage(NO_DATA_FOUND)));
 
         product.update(dto);
 
@@ -85,7 +89,7 @@ public class ProductServiceImpl implements ProductService {
     public void delete(Long productId, Long userId) {
         long deleteCnt = productQueryDslRepository.deleteByProductAndUserId(productId, userId);
         if(deleteCnt == 0){
-            throw new ApiRuntimeException(MessageConstants.DELETE_FAIL_MESSAGE);
+            throw new ApiRuntimeException(messageSourceService.getMessage(DELETE_FAILED));
         }
     }
 

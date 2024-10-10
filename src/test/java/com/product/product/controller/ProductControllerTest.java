@@ -3,6 +3,7 @@ package com.product.product.controller;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.product.config.abstracts.AbstractMvcTest;
 import com.product.config.security.WithMockUserCustom;
+import com.product.messagesource.service.MessageSourceService;
 import com.product.product.dto.ProductCreateDto;
 import com.product.product.entity.Product;
 import com.product.product.enums.EnumProductCategory;
@@ -28,6 +29,7 @@ import java.time.LocalDate;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import static com.product.util.MessageConstants.NO_DATA_FOUND;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -39,6 +41,8 @@ class ProductControllerTest extends AbstractMvcTest {
 
     @Autowired
     ProductService productService;
+    @Autowired
+    MessageSourceService messageSourceService;
 
     @Nested
     @DisplayName("상품 리스트 컨트롤러 테스트")
@@ -138,6 +142,13 @@ class ProductControllerTest extends AbstractMvcTest {
                     .andExpect(status().is(status.value()))
                     .andExpect(jsonPath("$.code").value(status.value()))
                     .andExpect(jsonPath("$.message").value(status.getReasonPhrase()));
+
+            mockMvc.perform(get("/api/products/999999")
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andDo(print())
+                    .andExpect(status().is(status.value()))
+                    .andExpect(jsonPath("$.code").value(status.value()))
+                    .andExpect(jsonPath("$.message").value(messageSourceService.getMessage(NO_DATA_FOUND)));
         }
 
 
