@@ -3,7 +3,14 @@ spring:
     virtual:
       enabled: true
 
-
   security:
     filter:
-      order: 2
+      order: 5
+
+server:
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
