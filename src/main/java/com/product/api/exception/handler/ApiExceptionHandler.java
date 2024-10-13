@@ -2,11 +2,13 @@ package com.product.api.exception.handler;
 
 import com.product.api.exception.ApiRuntimeException;
 import com.product.api.response.ApiExceptionResponse;
+import com.product.messagesource.service.MessageSourceService;
 import com.product.objectmapper.exception.JsonProcessingRuntimeException;
 import com.product.redis.exception.RedisRuntimeException;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.RequiredTypeException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,9 +29,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import static com.product.util.MessageConstants.*;
+
 @RestControllerAdvice
 @Slf4j
+@RequiredArgsConstructor
 public class ApiExceptionHandler {
+
+    private final MessageSourceService messageSourceService;
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResponseEntity<ApiExceptionResponse> httpRequestMethodNotSupportedExceptionHandler(HttpRequestMethodNotSupportedException e) {
@@ -49,14 +56,14 @@ public class ApiExceptionHandler {
     public ResponseEntity<ApiExceptionResponse> handlerJsonProcessingRuntimeException(JsonProcessingRuntimeException e) {
         log.error("## handlerJsonProcessingRuntimeException ##");
         this.log(e);
-        return ApiExceptionResponse.exception(HttpStatus.INTERNAL_SERVER_ERROR, "서버에서 오류가 발생하였습니다.");
+        return ApiExceptionResponse.exception(HttpStatus.INTERNAL_SERVER_ERROR, messageSourceService.getMessage(ERROR_SERVER_ERROR));
     }
 
     @ExceptionHandler(RedisRuntimeException.class)
     public ResponseEntity<ApiExceptionResponse> handlerRedisRuntimeException(RedisRuntimeException e) {
         log.error("## handlerRedisRuntimeException ##");
         this.log(e);
-        return ApiExceptionResponse.exception(HttpStatus.INTERNAL_SERVER_ERROR, "서버에서 오류가 발생하였습니다.");
+        return ApiExceptionResponse.exception(HttpStatus.INTERNAL_SERVER_ERROR, messageSourceService.getMessage(ERROR_SERVER_ERROR));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -73,21 +80,21 @@ public class ApiExceptionHandler {
                 )
                 .toList();
 
-        return ApiExceptionResponse.exception(HttpStatus.BAD_REQUEST, "필수값이 누락되었습니다.", list);
+        return ApiExceptionResponse.exception(HttpStatus.BAD_REQUEST, messageSourceService.getMessage(ERROR_REQUIRED_VALUE), list);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ApiExceptionResponse> httpMessageNotReadableExceptionHandler(HttpMessageNotReadableException e) {
         log.error("## httpMessageNotReadableExceptionHandler ##");
         this.log(e);
-        return ApiExceptionResponse.exception(HttpStatus.BAD_REQUEST, "필수값이 누락되었습니다.");
+        return ApiExceptionResponse.exception(HttpStatus.BAD_REQUEST, messageSourceService.getMessage(ERROR_REQUIRED_VALUE));
     }
 
     @ExceptionHandler(MissingRequestHeaderException.class)
     public ResponseEntity<ApiExceptionResponse> missingRequestHeaderExceptionHandler(MissingRequestHeaderException e) {
         log.error("## missingRequestHeaderExceptionHandler ##");
         this.log(e);
-        return ApiExceptionResponse.exception(HttpStatus.BAD_REQUEST, "헤더가 잘못 입력되었습니다.");
+        return ApiExceptionResponse.exception(HttpStatus.BAD_REQUEST, messageSourceService.getMessage(ERROR_MISSING_HEADER));
     }
 
     @ExceptionHandler(ApiRuntimeException.class)
@@ -119,28 +126,28 @@ public class ApiExceptionHandler {
         log.error("## usernameNotFoundExceptionHandler ##");
         this.log(e);
 
-        return ApiExceptionResponse.exception(HttpStatus.UNAUTHORIZED, "사용자 정보가 올바르지 않습니다.");
+        return ApiExceptionResponse.exception(HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(SignatureException.class)
     public ResponseEntity<ApiExceptionResponse> signatureExceptionHandler(SignatureException e) {
         log.error("## signatureExceptionHandler ##");
         this.log(e);
-        return ApiExceptionResponse.exception(HttpStatus.UNAUTHORIZED, "토큰이 유효하지 않습니다.");
+        return ApiExceptionResponse.exception(HttpStatus.UNAUTHORIZED, messageSourceService.getMessage(ERROR_INVALID_TOKEN));
 
     }
     @ExceptionHandler(RequiredTypeException.class)
     public ResponseEntity<ApiExceptionResponse> requiredTypeExceptionHandler(RequiredTypeException e) {
         log.error("## requiredTypeExceptionHandler ##");
         this.log(e);
-        return ApiExceptionResponse.exception(HttpStatus.UNAUTHORIZED, "토큰이 유효하지 않습니다.");
+        return ApiExceptionResponse.exception(HttpStatus.UNAUTHORIZED, messageSourceService.getMessage(ERROR_INVALID_TOKEN));
 
     }
     @ExceptionHandler(GeneralSecurityException.class)
     public ResponseEntity<ApiExceptionResponse> generalSecurityExceptionHandler(GeneralSecurityException e) {
         log.error("## generalSecurityExceptionHandler ##");
         this.log(e);
-        return ApiExceptionResponse.exception(HttpStatus.UNAUTHORIZED, "토큰이 유효하지 않습니다.");
+        return ApiExceptionResponse.exception(HttpStatus.UNAUTHORIZED, messageSourceService.getMessage(ERROR_INVALID_TOKEN));
 
     }
 
@@ -148,14 +155,14 @@ public class ApiExceptionHandler {
     public ResponseEntity<ApiExceptionResponse> malformedJwtExceptionHandler(MalformedJwtException e) {
         log.error("## malformedJwtExceptionHandler ##");
         this.log(e);
-        return ApiExceptionResponse.exception(HttpStatus.UNAUTHORIZED, "올바르지 않은 토큰입니다.");
+        return ApiExceptionResponse.exception(HttpStatus.UNAUTHORIZED, messageSourceService.getMessage(ERROR_MALFORMED_JWT));
     }
 
     @ExceptionHandler(ExpiredJwtException.class)
     public ResponseEntity<ApiExceptionResponse> expiredJwtExceptionHandler(ExpiredJwtException e) {
         log.error("## expiredJwtExceptionHandler ##");
         this.log(e);
-        return ApiExceptionResponse.exception(HttpStatus.UNAUTHORIZED, "토큰이 만료되었습니다.");
+        return ApiExceptionResponse.exception(HttpStatus.UNAUTHORIZED, messageSourceService.getMessage(ERROR_TOKEN_EXPIRED));
     }
 
     @ExceptionHandler(Exception.class)
