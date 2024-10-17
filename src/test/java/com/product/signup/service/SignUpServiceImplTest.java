@@ -63,16 +63,16 @@ class SignUpServiceImplTest {
 
         private static Stream<Arguments> success() {
             return Stream.of(
-                    Arguments.of("01092348678", "홍길동1", "1234@aA!", "hong1@email.com", "테스트데이터", HttpStatus.CREATED),
-                    Arguments.of("01042848678", "이순신1", "1234@aA!", "lee1@email.com", "", HttpStatus.CREATED),
-                    Arguments.of("01056385679", "강감찬1", "1234@aA!", "kang1@email.com", "", HttpStatus.CREATED)
+                    Arguments.of("honggildo", "홍길동1", "1234@aA!", "hong1@email.com", "테스트데이터", HttpStatus.CREATED),
+                    Arguments.of("leesun1", "이순신1", "1234@aA!", "lee1@email.com", "", HttpStatus.CREATED),
+                    Arguments.of("gang22", "강감찬1", "1234@aA!", "kang1@email.com", "", HttpStatus.CREATED)
             );
         }
 
         private static Stream<Arguments> fail() {
             return Stream.of(
-                    Arguments.of("0101234567823232323", "홍길동", "1234@A!@#a", "test@email.com", "테스트데이터", DataIntegrityViolationException.class),
-                    Arguments.of("01012345678", null, "1234@A!@#a", "test3@email.com", "테스트데이터", JpaSystemException.class)
+                    Arguments.of("honggildong23232323", "홍길동", "1234@A!@#a", "test@email.com", "테스트데이터", DataIntegrityViolationException.class),
+                    Arguments.of("honggildong", null, "1234@A!@#a", "test3@email.com", "테스트데이터", JpaSystemException.class)
             );
         }
     }

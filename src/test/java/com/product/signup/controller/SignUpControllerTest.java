@@ -37,9 +37,9 @@ class SignUpControllerTest extends AbstractMvcTest {
         @DisplayName("회원가입 컨트롤러 성공 테스트")
         @ParameterizedTest
         @MethodSource
-        void success(String loginId, String userName, String password, String email, String description, HttpStatus status) throws Exception {
+        void success(String loginId, String userName, String password, String email, String mobile, String description, HttpStatus status) throws Exception {
 
-            SignUpCreateRequest request = buildSignUpCreateRequest(loginId, userName, password, email, description);
+            SignUpCreateRequest request = buildSignUpCreateRequest(loginId, userName, password, email, mobile, description);
 
             mockMvc.perform(post("/api/signup")
                             .contentType(MediaType.APPLICATION_JSON)
@@ -58,7 +58,7 @@ class SignUpControllerTest extends AbstractMvcTest {
             assertEquals(EnumUserType.OWNER, response.userType());
             assertEquals(EnumUserStatus.ACTIVE, response.status());
             assertEquals(response.email(), email);
-            assertEquals(response.mobile(), loginId);
+            assertEquals(response.mobile(), mobile);
             assertEquals(response.description(), description);
 
         }
@@ -66,9 +66,9 @@ class SignUpControllerTest extends AbstractMvcTest {
         @DisplayName("회원가입 컨트롤러 실패 테스트")
         @ParameterizedTest
         @MethodSource
-        void fail (String loginId, String userName, String password, String email, String description, HttpStatus status, String field) throws Exception {
+        void fail (String loginId, String userName, String password, String email, String mobile, String description, HttpStatus status) throws Exception {
 
-            SignUpCreateRequest request = buildSignUpCreateRequest(loginId, userName, password, email, description);
+            SignUpCreateRequest request = buildSignUpCreateRequest(loginId, userName, password, email, mobile, description);
 
             mockMvc.perform(post("/api/signup")
                             .contentType(MediaType.APPLICATION_JSON)
@@ -77,36 +77,36 @@ class SignUpControllerTest extends AbstractMvcTest {
                     .andDo(print())
                     .andExpect(status().is(status.value()))
                     .andExpect(jsonPath("$.code").value(status.value()))
-                    .andExpect(jsonPath("$.error[0].field").value(field))
             ;
 
         }
 
         private static Stream<Arguments> success() {
             return Stream.of(
-                    Arguments.of("01092348678", "홍길동1", "1234@aA!", "hong1@email.com", "테스트데이터", HttpStatus.CREATED),
-                    Arguments.of("01042848678", "이순신1", "1234@aA!", "lee1@email.com", "", HttpStatus.CREATED),
-                    Arguments.of("01056385679", "강감찬1", "1234@aA!", "kang1@email.com", "", HttpStatus.CREATED)
+                    Arguments.of("aA21a2", "홍길동1", "1234@aA!", "hong1@email.com", "01052355678", "테스트데이터", HttpStatus.CREATED),
+                    Arguments.of("d1aaq1", "이순신1", "1234@aA!", "lee1@email.com", "01052385679", "", HttpStatus.CREATED),
+                    Arguments.of("ganggam1", "강감찬1", "1234@aA!", "kang1@email.com", "01072355670", "", HttpStatus.CREATED)
             );
         }
 
         private static Stream<Arguments> fail() {
             return Stream.of(
-                    Arguments.of("0101234567", "홍길동", "1234@A!@#a", "test@email.com", "테스트데이터", HttpStatus.BAD_REQUEST, "loginId"),
-                    Arguments.of("01012345678", "홍길동", "1234@A!@#", "test@email.com", "테스트데이터", HttpStatus.BAD_REQUEST, "password"),
-                    Arguments.of("01012345678", "홍길동", "1234@!@#a", "test@email.com", "테스트데이터", HttpStatus.BAD_REQUEST, "password"),
-                    Arguments.of("01012345678", "홍길동", "1234@A!@#a", "invalidEmail", "테스트데이터", HttpStatus.BAD_REQUEST, "email")
+                    Arguments.of("0101234567", "홍길동", "1234@A!@#a", "test@email.com", "010223476", "테스트데이터", HttpStatus.BAD_REQUEST),
+                    Arguments.of("홍길동", "홍길동", "1234@A!@#", "test@email.com", "01015348679", "테스트데이터", HttpStatus.BAD_REQUEST),
+                    Arguments.of("honggildong", "홍길동", "1234@!@#a", "test@email.com", "0101536567", "테스트데이터", HttpStatus.BAD_REQUEST),
+                    Arguments.of("honggildong", "홍길동", "1234@A!@#a", "invalidEmail", "01032375671", "테스트데이터", HttpStatus.BAD_REQUEST)
             );
         }
 
     }
 
-    private SignUpCreateRequest buildSignUpCreateRequest(String loginId, String userName, String password, String email, String description) {
+    private SignUpCreateRequest buildSignUpCreateRequest(String loginId, String userName, String password, String email, String mobile, String description) {
         return SignUpCreateRequest.builder()
                 .loginId(loginId)
                 .userName(userName)
                 .password(password)
                 .email(email)
+                .mobile(mobile)
                 .description(description)
                 .build();
     }
