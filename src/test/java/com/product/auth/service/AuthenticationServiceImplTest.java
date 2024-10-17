@@ -57,16 +57,16 @@ class AuthenticationServiceImplTest {
         private static Stream<Arguments> success() {
             return Stream.of(
                     Arguments.of("admin", "1234@aA!"),
-                    Arguments.of("01012345678", "1234@aA!"),
-                    Arguments.of("01022345678", "1234@aA!")
+                    Arguments.of("honggildong", "1234@aA!"),
+                    Arguments.of("leesunsin", "1234@aA!")
             );
         }
 
         private static Stream<Arguments> fail() {
             return Stream.of(
                     Arguments.of("admin", "1235@aA!", BadCredentialsException.class),
-                    Arguments.of("01012345678", "1434@aA!", BadCredentialsException.class),
-                    Arguments.of("01022345678", "1235@aA!", BadCredentialsException.class)
+                    Arguments.of("honggildong", "1434@aA!", BadCredentialsException.class),
+                    Arguments.of("leesunsin", "1235@aA!", BadCredentialsException.class)
             );
         }
 
@@ -120,8 +120,8 @@ class AuthenticationServiceImplTest {
         private static Stream<Arguments> success() {
             return Stream.of(
                     Arguments.of("admin", "1234@aA!"),
-                    Arguments.of("01022345678", "1234@aA!"),
-                    Arguments.of("01012345679", "1234@aA!")
+                    Arguments.of("leesunsin", "1234@aA!"),
+                    Arguments.of("ganggamchan", "1234@aA!")
             );
         }
 
@@ -186,8 +186,8 @@ class AuthenticationServiceImplTest {
         private static Stream<Arguments> success() {
             return Stream.of(
                     Arguments.of("admin", "1234@aA!"),
-                    Arguments.of("01012345678", "1234@aA!"),
-                    Arguments.of("01022345678", "1234@aA!")
+                    Arguments.of("honggildong", "1234@aA!"),
+                    Arguments.of("leesunsin", "1234@aA!")
             );
         }
 

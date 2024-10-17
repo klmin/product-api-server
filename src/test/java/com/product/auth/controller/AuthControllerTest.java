@@ -81,9 +81,9 @@ class AuthControllerTest extends AbstractMvcTest {
 
         private static Stream<Arguments> success() {
             return Stream.of(
-                    Arguments.of("01012345678", "1234@aA!", HttpStatus.OK),
-                    Arguments.of("01022345678", "1234@aA!", HttpStatus.OK),
-                    Arguments.of("01012345679 ", "1234@aA!", HttpStatus.OK),
+                    Arguments.of("honggildong", "1234@aA!", HttpStatus.OK),
+                    Arguments.of("leesunsin", "1234@aA!", HttpStatus.OK),
+                    Arguments.of("ganggamchan ", "1234@aA!", HttpStatus.OK),
                     Arguments.of("admin", "1234@aA!", HttpStatus.OK)
             );
         }
@@ -91,9 +91,9 @@ class AuthControllerTest extends AbstractMvcTest {
 
         private static Stream<Arguments> fail() {
             return Stream.of(
-                    Arguments.of("010123456", "1234@aA!", HttpStatus.UNAUTHORIZED),
+                    Arguments.of("honggil", "1234@aA!", HttpStatus.UNAUTHORIZED),
                     Arguments.of("admin2", "1234@aA!", HttpStatus.UNAUTHORIZED),
-                    Arguments.of("01099345679", "1234@aA!", HttpStatus.UNAUTHORIZED)
+                    Arguments.of("leesun", "1234@aA!", HttpStatus.UNAUTHORIZED)
             );
         }
 
