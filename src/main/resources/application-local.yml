@@ -16,19 +16,7 @@ spring:
       password: klmin6394
 
   jpa:
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
-        show_sql: true
-        use_sql_comments: true
-        dialect: org.hibernate.dialect.MySQLDialect
     open-in-view: false
-
-#logging:
- # level:
-  #  org.hibernate.type.descriptor.sql.BasicBinder: TRACE
-   # org.springframework.orm.jpa: DEBUG
 
 security :
   jwt :

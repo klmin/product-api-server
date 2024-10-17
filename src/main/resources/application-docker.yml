@@ -25,10 +25,10 @@ spring:
         dialect: org.hibernate.dialect.MySQLDialect
     open-in-view: false
 
-#logging:
- # level:
-  #  org.hibernate.type.descriptor.sql.BasicBinder: TRACE
-   # org.springframework.orm.jpa: DEBUG
+decorator:
+  datasource:
+    p6spy:
+      enable-logging: false
 
 security :
   jwt :
