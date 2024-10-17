@@ -11,6 +11,19 @@ GRANT ALL PRIVILEGES ON product.* TO 'product'@'%';
 
 use product;
 
+CREATE TABLE `tb_api_log` (
+`api_log_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '아이디',
+`client_ip` varchar(40) NOT NULL COMMENT '클라이언트IP',
+`url` text NOT NULL COMMENT '주소',
+`content_type` varchar(128) DEFAULT NULL COMMENT 'Content-Type',
+`http_method` varchar(7) NOT NULL COMMENT 'HTTP 메서드',
+`query_string` text COMMENT '쿼리스트링',
+`request_body` text COMMENT '요청본문',
+`response_body` text NOT NULL COMMENT '응답본문',
+`reg_dttm` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT '생성시간',
+PRIMARY KEY (`api_log_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='요청 로그 테이블';
+
 
 CREATE TABLE `tb_user` (
 `user_id` bigint(20) AUTO_INCREMENT COMMENT '유저아이디',

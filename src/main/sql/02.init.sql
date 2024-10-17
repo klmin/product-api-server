@@ -3,7 +3,7 @@ use product;
 
 insert into tb_role(role_id, role_name) values('ROLE_ADMIN', '시스템관리자롤');
 
-insert into tb_role(role_id, role_name) values('ROLE_OWNER', '카페관지자롤');
+insert into tb_role(role_id, role_name) values('ROLE_OWNER', '사장님롤');
 
 insert into tb_role_hierarchy(child_id, parent_id) values('ROLE_ADMIN', 'ROLE_OWNER');
 
@@ -11,15 +11,15 @@ ALTER TABLE tb_user AUTO_INCREMENT = 5;
 
 INSERT INTO product.tb_user
 (user_id, login_id, user_name, password, user_type, status, email, mobile, description, reg_id, reg_dttm, upd_id, upd_dttm)
-VALUES(1, '01012345678', '홍길동', '$2a$10$Hku6Djz9Mc/7nr4qVmYnSukk8oPM3mwxLl9i9lA9NmFycxwF2/HMi', 'OWNER', 'ACTIVE', 'hong@email.com', '01012345678', '테스트데이터', NULL, now(), NULL, NULL);
+VALUES(1, 'honggildong', '홍길동', '$2a$10$Hku6Djz9Mc/7nr4qVmYnSukk8oPM3mwxLl9i9lA9NmFycxwF2/HMi', 'OWNER', 'ACTIVE', 'hong@email.com', 'honggildong', '테스트데이터', NULL, now(), NULL, NULL);
 
 INSERT INTO product.tb_user
 (user_id, login_id, user_name, password, user_type, status, email, mobile, description, reg_id, reg_dttm, upd_id, upd_dttm)
-VALUES(2, '01022345678', '이순신', '$2a$10$Zb7GT.x5mqHL.R6adBF3tOIwpq4ZokxcUM066D4R9RrmRQqc91rFq', 'OWNER', 'ACTIVE', 'lee@email.com', '01022345678', '', NULL, now(), NULL, NULL);
+VALUES(2, 'leesunsin', '이순신', '$2a$10$Zb7GT.x5mqHL.R6adBF3tOIwpq4ZokxcUM066D4R9RrmRQqc91rFq', 'OWNER', 'ACTIVE', 'lee@email.com', 'leesunsin', '', NULL, now(), NULL, NULL);
 
 INSERT INTO product.tb_user
 (user_id, login_id, user_name, password, user_type, status, email, mobile, description, reg_id, reg_dttm, upd_id, upd_dttm)
-VALUES(3, '01012345679', '강감찬', '$2a$10$P3R.wHfbGcH4bwkzYLHr2uAvORBwUojTmKcUZ6dV.XHM1Sd5clkPG', 'OWNER', 'ACTIVE', 'kang@email.com', '01012345679', '', NULL, now(), NULL, NULL);
+VALUES(3, 'ganggamchan', '강감찬', '$2a$10$P3R.wHfbGcH4bwkzYLHr2uAvORBwUojTmKcUZ6dV.XHM1Sd5clkPG', 'OWNER', 'ACTIVE', 'kang@email.com', 'ganggamchan', '', NULL, now(), NULL, NULL);
 
 INSERT INTO product.tb_user
 (user_id, login_id, user_name, password, user_type, status, email, mobile, description, reg_id, reg_dttm, upd_id, upd_dttm)
