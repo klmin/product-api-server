@@ -1,6 +1,7 @@
 package com.product.signup.controller;
 
 import com.product.api.response.ApiResponse;
+import com.product.signup.mapper.SignUpMapper;
 import com.product.signup.request.SignUpCreateRequest;
 import com.product.signup.service.SignUpService;
 import jakarta.validation.Valid;
@@ -17,10 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class SignUpController {
 
     private final SignUpService signUpService;
+    private final SignUpMapper signUpMapper;
 
     @PostMapping
     public ResponseEntity<ApiResponse<Void>> signup(@RequestBody @Valid SignUpCreateRequest request)  {
-        signUpService.signUp(request.toDTO());
+        signUpService.signUp(signUpMapper.toCreateDto(request));
         return ApiResponse.created();
     }
 }
