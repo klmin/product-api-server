@@ -11,7 +11,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -21,7 +20,7 @@ public class CacheHttpServletRequest extends HttpServletRequestWrapper {
 
     private static final String JSON_CONTENT_TYPE = "application/json";
     private static final String FORM_CONTENT_TYPE = "application/x-www-form-urlencoded";
-    private static final Set<String> SUPPORTED_METHODS = Set.of("GET", "POST", "PUT", "DELETE", "PATCH");
+    private static final Set<String> SUPPORTED_METHODS = Set.of("POST", "PUT", "PATCH");
     private final String body;
 
 
@@ -32,7 +31,7 @@ public class CacheHttpServletRequest extends HttpServletRequestWrapper {
         String contentType = request.getContentType();
         String method = request.getMethod();
 
-        if(contentType == null || !SUPPORTED_METHODS.contains(method.toUpperCase())){
+        if(contentType == null){
             this.body = null;
         }else{
 
@@ -40,8 +39,8 @@ public class CacheHttpServletRequest extends HttpServletRequestWrapper {
 
             if(contentType.startsWith(JSON_CONTENT_TYPE)){
                 this.body = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
-            }else if(FORM_CONTENT_TYPE.equalsIgnoreCase(contentType)){
-                this.body = getFormRequestBody(request.getQueryString(), request.getParameterMap());
+            }else if(FORM_CONTENT_TYPE.equalsIgnoreCase(contentType) && SUPPORTED_METHODS.contains(method.toUpperCase())){
+                this.body = getFormRequestBody(request.getParameterMap());
             }else{
                 this.body = null;
             }
@@ -49,39 +48,12 @@ public class CacheHttpServletRequest extends HttpServletRequestWrapper {
 
     }
 
-    private Map<String, String> getQueryParamMap(String queryString){
 
-        if (queryString == null) {
-            return new HashMap<>();
-        }
-
-        Map<String, String> queryParams = new HashMap<>();
-
-        String[] pairs = queryString.split("&");
-
-        for (String pair : pairs) {
-            String[] keyValue = pair.split("=");
-            if (keyValue.length == 2) {
-                queryParams.put(keyValue[0], keyValue[1]);
-            }
-        }
-
-
-        return queryParams;
-    }
-
-    private String getFormRequestBody(String queryString, Map<String, String[]> parameterMap){
-
-        Map<String, String> queryParams = getQueryParamMap(queryString);
+    private String getFormRequestBody(Map<String, String[]> parameterMap){
 
         StringBuilder requestBodyBuilder = new StringBuilder();
 
-        parameterMap.forEach((key, values) -> {
-            if(!queryParams.containsKey(key)) {
-                requestBodyBuilder.append(key).append("=").append(String.join(",", values)).append("&");
-            }
-
-        });
+        parameterMap.forEach((key, values) -> requestBodyBuilder.append(key).append("=").append(String.join(",", values)).append("&"));
 
         return formRequestStringCheck(requestBodyBuilder);
     }
