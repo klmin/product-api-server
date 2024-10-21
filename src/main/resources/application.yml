@@ -6,8 +6,13 @@ spring :
         - local
       docker:
         - docker
+      prod:
+        - prod
     include :
       - common
+
+  jpa:
+    open-in-view: false
 
 ---
 spring :
@@ -26,4 +31,13 @@ spring :
 
 logging:
   config: classpath:log/log4j2-docker.yml
+
+---
+spring :
+  config :
+    activate :
+      on-profile : prod
+
+logging:
+  config: classpath:log/log4j2-prod.yml
 
