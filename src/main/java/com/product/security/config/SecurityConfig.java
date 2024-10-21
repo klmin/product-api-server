@@ -1,8 +1,12 @@
 package com.product.security.config;
 
 import com.product.jwt.filter.JwtAuthenticationFilter;
+import com.product.jwt.property.JwtProperties;
+import com.product.jwt.service.JwtService;
+import com.product.redis.service.RedisService;
 import com.product.security.service.SecurityService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,6 +17,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.ExceptionHandlingConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -22,20 +27,25 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import java.util.List;
 
 @Configuration
 @EnableWebSecurity
-@RequiredArgsConstructor
 @EnableMethodSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final AuthenticationEntryPoint entryPoint;
     private final AccessDeniedHandler accessDeniedHandler;
     private final SecurityService securityService;
     private final PasswordEncoder passwordEncoder;
+    private final JwtProperties jwtProperties;
+    private final JwtService jwtService;
+    @Qualifier("handlerExceptionResolver")
+    private final HandlerExceptionResolver handlerExceptionResolver;
+    private final RedisService redisService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -48,9 +58,17 @@ public class SecurityConfig {
                                                     )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
-                .exceptionHandling(handler -> handler.authenticationEntryPoint(entryPoint).accessDeniedHandler(accessDeniedHandler))
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling(this::configureExceptionHandling)
+                .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .build();
+    }
+
+    private void configureExceptionHandling(ExceptionHandlingConfigurer<HttpSecurity> handler) {
+        handler.authenticationEntryPoint(entryPoint).accessDeniedHandler(accessDeniedHandler);
+    }
+
+    private JwtAuthenticationFilter jwtAuthenticationFilter() {
+        return new JwtAuthenticationFilter(jwtProperties, securityService, jwtService, handlerExceptionResolver, redisService);
     }
 
     @Bean

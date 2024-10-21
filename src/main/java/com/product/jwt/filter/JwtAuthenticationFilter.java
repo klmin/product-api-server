@@ -16,11 +16,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
@@ -28,7 +26,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 
-@Component
 @Slf4j
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -36,7 +33,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtProperties jwtProperties;
     private final SecurityService securityService;
     private final JwtService jwtService;
-    @Qualifier("handlerExceptionResolver")
     private final HandlerExceptionResolver handlerExceptionResolver;
     private final RedisService redisService;
 
