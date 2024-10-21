@@ -4,14 +4,14 @@ spring:
       enabled: true
 
   datasource:
-    url: jdbc:mysql://mysql:3307/product
+    url: jdbc:mysql://localhost:3307/product
     username: product
     password: product@1234
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   data:
     redis:
-      host: redis
+      host: localhost
       port: 6379
       password: klmin6394
 
@@ -22,7 +22,6 @@ spring:
         format_sql: true
         show_sql: true
         use_sql_comments: true
-        dialect: org.hibernate.dialect.MySQLDialect
     open-in-view: false
 
 decorator:
