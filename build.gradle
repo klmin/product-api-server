@@ -62,6 +62,7 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
+    testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.26.3'
 
 }
 
