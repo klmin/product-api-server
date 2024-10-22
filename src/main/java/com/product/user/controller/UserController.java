@@ -22,7 +22,7 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<UserDetailResponse>> get(@PathVariable Long id)  {
-        UserDetailResponse entity = service.findByUserId(id, UserDetailResponse.class);
+        var entity = service.findByUserId(id, UserDetailResponse.class);
         return ApiResponse.success(entity);
     }
 
