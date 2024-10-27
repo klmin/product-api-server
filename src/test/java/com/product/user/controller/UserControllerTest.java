@@ -74,7 +74,7 @@ class UserControllerTest extends AbstractMvcTest {
     }
 
     @Test
-    void delete() throws InterruptedException {
+    void delete() {
 
         Long userId = 1L;
 
@@ -84,7 +84,6 @@ class UserControllerTest extends AbstractMvcTest {
                 status().isOk());
 
         assertTrue(response.isResult());
-        Thread.sleep(1000);
 
     }
 }
