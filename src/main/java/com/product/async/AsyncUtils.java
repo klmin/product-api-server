@@ -8,7 +8,7 @@ import java.util.concurrent.CompletableFuture;
 
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class AsyncUils {
+public class AsyncUtils {
 
     public static void runAsync(Runnable task) {
         CompletableFuture.runAsync(() -> {
