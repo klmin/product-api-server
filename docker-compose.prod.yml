@@ -14,7 +14,7 @@ services:
       - "./mysql/data:/var/lib/mysql"
       - "./src/main/sql:/docker-entrypoint-initdb.d"
     networks:
-      - my_network
+      - product_api_server_network
     restart: always
 
   redis:
@@ -25,7 +25,7 @@ services:
     ports:
       - '6379:6379'
     networks:
-      - my_network
+      - product_api_server_network
     restart: always
 
 
@@ -37,11 +37,11 @@ services:
     ports:
       - '8080:8080'
     networks:
-      - my_network
+      - product_api_server_network
     depends_on:
       - mysql
       - redis
 
 networks:
-  my_network:
+  product_api_server_network:
     driver: bridge
