@@ -1,6 +1,7 @@
 package com.product.auth.service;
 
 import com.product.api.exception.ApiRuntimeException;
+import com.product.async.AsyncUtils;
 import com.product.auth.dto.AuthGenerateTokenDto;
 import com.product.auth.response.AuthRefreshTokenResponse;
 import com.product.auth.response.AuthTokenResponse;
@@ -117,8 +118,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         long expiration = jwtClaims.getExpiration().getTime();
         long ttl = (expiration - now) / 1000;
 
-        redisService.insert(RedisCacheNames.generateJwtBlackListTokenCacheKey(token), jwtClaims.getUserId(), ttl, TimeUnit.SECONDS);
-        redisService.delete(RedisCacheNames.generateJwtRefreshTokenCacheKey(userId));
+        AsyncUtils.runAsync(()->{
+            redisService.insert(RedisCacheNames.generateJwtBlackListTokenCacheKey(token), jwtClaims.getUserId(), ttl, TimeUnit.SECONDS);
+            redisService.delete(RedisCacheNames.generateJwtRefreshTokenCacheKey(userId));
+        });
 
     }
 
@@ -132,8 +135,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     public void insertRefreshToken(Long userId, String refreshToken){
-        String key = RedisCacheNames.generateJwtRefreshTokenCacheKey(userId);
-        redisService.insert(key, refreshToken, jwtService.getRefreshExpirationSecond(), TimeUnit.SECONDS);
+        AsyncUtils.runAsync(() -> redisService.insert(RedisCacheNames.generateJwtRefreshTokenCacheKey(userId),
+                refreshToken, jwtService.getRefreshExpirationSecond(), TimeUnit.SECONDS));
     }
 
     private TokenResponse buildAuthTokenResponse(SecurityDto securityDto) {

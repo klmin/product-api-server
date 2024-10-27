@@ -2,6 +2,7 @@ package com.product.user.service;
 
 
 import com.product.api.exception.ApiRuntimeException;
+import com.product.async.AsyncUtils;
 import com.product.redis.constants.RedisCacheNames;
 import com.product.redis.service.RedisService;
 import com.product.user.dto.UserCreateDto;
@@ -10,8 +11,6 @@ import com.product.user.entity.User;
 import com.product.user.enums.EnumUserStatus;
 import com.product.user.repository.UserRepository;
 import com.product.userrole.dto.UserRoleCreateDto;
-import com.product.userrole.entity.UserRole;
-import com.product.userrole.projection.UserRoleProjection;
 import com.product.userrole.repository.UserRoleQueryDslRepository;
 import com.product.userrole.service.UserRoleService;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +18,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Collection;
 
 @Service
 @Transactional
@@ -73,7 +70,7 @@ public class UserServiceImpl implements UserService {
         long deleteCnt = userRoleQueryDslRepository.deleteUserRoleByUserId(userId);
         if(deleteCnt > 0) {
             repository.deleteOrThrow(userId);
-            redisService.delete(RedisCacheNames.generateUserStatusCacheKey(userId));
+            AsyncUtils.runAsync(() -> redisService.delete(RedisCacheNames.generateUserStatusCacheKey(userId)));
         }
     }
 
@@ -89,7 +86,7 @@ public class UserServiceImpl implements UserService {
     public void changeStatus(Long userId, EnumUserStatus status) {
         User user = repository.get(userId);
         user.changeStatus(status);
-        redisService.delete(RedisCacheNames.generateUserStatusCacheKey(userId));
+        AsyncUtils.runAsync(() -> redisService.delete(RedisCacheNames.generateUserStatusCacheKey(userId)));
     }
 
     @Override
