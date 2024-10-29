@@ -31,6 +31,8 @@ services:
 
   app:
     image: 'product-api-server'
+    environment:
+      TZ: Asia/Seoul
     build:
       context: .
       dockerfile: Dockerfile
