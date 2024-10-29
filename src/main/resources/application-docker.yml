@@ -33,4 +33,4 @@ security :
     secret-key : DEQ78P3JGJ/9VGhekrW+TTyO8fbiBOAaTrSImSaMZgs=
     expiration-time : 900000
     refresh-expiration-time : 1800000
-    exclude-path: /api/auth/login, /api/auth/refresh-token
+    exclude-path: /api/auth/login, /api/auth/refresh-token, /api/welcome

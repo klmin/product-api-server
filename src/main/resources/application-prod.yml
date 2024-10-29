@@ -25,4 +25,4 @@ security :
     secret-key : 7ol3624yqKR9LbZ7kiMj5hvj4X9FQYKhroLAmrhudzQ=
     expiration-time : 900000
     refresh-expiration-time : 1800000
-    exclude-path: /api/auth/login, /api/auth/refresh-token
+    exclude-path: /api/auth/login, /api/auth/refresh-token, /api/welcome
